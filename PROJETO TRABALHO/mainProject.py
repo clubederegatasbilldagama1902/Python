@@ -1,4 +1,5 @@
-# Importações de bibliotecas
+# -----------------------> Importações de bibliotecas <-----------------------
+
 import ttkbootstrap as ttk  # Biblioteca para estilização do Tkinter
 from ttkbootstrap.constants import *  # Constantes do ttkbootstrap
 from ttkbootstrap.widgets import Separator  # Widget Separator do ttkbootstrap
@@ -11,7 +12,8 @@ import mysql.connector
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-# Definição de cores usadas na interface
+# -----------------------> Definição de cores usadas na interface <-----------------------
+
 purple = "#442e73"
 lightPurple = "#664983"
 tiffany = "#0ABAB2"
@@ -19,17 +21,20 @@ lightGolden = "#FADA55"
 blue = "#0A7AB2"
 white = "#FFFFFF"
 
-# Configuração da janela principal
+# -----------------------> Configuração da janela principal <-----------------------
+
 window = ttk.Window(themename="cyborg")  # Cria janela com tema "cyborg"
 window.title("Plataforma de Jogos")  # Título da janela
 window.geometry("1600x700")  # Dimensões da janela
 window.configure(background=purple)  # Cor de fundo
 window.resizable(width=True, height=True)  # Janela não redimensionável
 
-# Configuração de estilos
+# -----------------------> Configuração de estilos <-----------------------
+
 style = ttk.Style()
 
-# Estilo para botões personalizados
+# -----------------------> Estilo para botões personalizados <-----------------------
+
 style.configure("Custom.TButton",
                 background=lightPurple,
                 foreground="white",
@@ -49,7 +54,8 @@ style.configure("CustomTwo.TButton",
 style.map("CustomTwo.TButton",
           background=[("active", "#573a87")])
 
-# Carregamento e preparação de imagens para os botões
+# -----------------------> Carregamento e preparação de imagens para os botões <-----------------------
+
 selectImage = Image.open("select.png")  # Abre imagem
 selectImage = selectImage.resize((25,25))  # Redimensiona
 selectImage = ImageTk.PhotoImage(selectImage)  # Converte para formato Tkinter
@@ -66,12 +72,13 @@ deleteImage = Image.open("delete.png")
 deleteImage = deleteImage.resize((25,25))
 deleteImage = ImageTk.PhotoImage(deleteImage)
 
-# Criação de frames para cada operação CRUD
+# -----------------------> Criação de frames para cada operação CRUD <-----------------------
+
 frameSelect = tk.Frame(window, width=800, height=600)
 frameSelect.configure(background=lightPurple)
 
 frameInsert = tk.Frame(window, width=1300, height=600)
-frameInsert.configure(background=tiffany)
+frameInsert.configure(background=lightPurple)
 
 frameUpdate = tk.Frame(window, width=1300, height=600)
 frameUpdate.configure(background=lightGolden)
@@ -79,17 +86,18 @@ frameUpdate.configure(background=lightGolden)
 frameDelete = tk.Frame(window, width=1300, height=600)
 frameDelete.configure(background=blue)
 
-frameCart = tk.Frame(window, width=300, height=660)
-frameCart.configure(background=purple)
+frameCart = tk.Frame(window, width=470, height=600)
+frameCart.configure(background=tiffany)
 
-# Variáveis para controlar a visibilidade dos frames
+# -----------------------> Variáveis para controlar a visibilidade dos frames <-----------------------
+
 frameSelectVisible = False
 frameInsertVisible = False
 frameUpdateVisible = False
 frameDeleteVisible = False
 frameCartVisible = False
 
-# Funções para mostrar/esconder os frames
+# -----------------------> Funções para mostrar/esconder os frames <-----------------------
 
 def selectFrame():
     global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
@@ -101,7 +109,8 @@ def selectFrame():
     else:
         frameSelect.place(x=250, y=15)  # Mostra o frame
         frameSelectVisible = True
-        #frameCart.place(x=1000,y=15)
+        frameCart.place(x=1055,y=15)
+        frameCartVisible = True
         # Esconde os outros frames
         frameInsert.place_forget()
         frameInsertVisible = False
@@ -110,9 +119,10 @@ def selectFrame():
         frameDelete.place_forget()
         frameDeleteVisible = False
 
-# Funções similares para os outros frames
+# -----------------------> Funções similares para os outros frames <-----------------------
+
 def insertFrame():
-    global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible
+    global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
     if frameInsertVisible:
         frameInsert.place_forget()
         frameInsertVisible = False
@@ -126,9 +136,11 @@ def insertFrame():
         frameUpdateVisible = False
         frameDelete.place_forget()
         frameDeleteVisible = False
+        frameCart.place_forget()
+        frameCartVisible = False
 
 def updateFrame():
-    global frameUpdateVisible, frameSelectVisible, frameInsertVisible, frameDeleteVisible
+    global frameUpdateVisible, frameSelectVisible, frameInsertVisible, frameDeleteVisible, frameCartVisible
     if frameUpdateVisible:
         frameUpdate.place_forget()
         frameUpdateVisible = False
@@ -142,9 +154,11 @@ def updateFrame():
         frameInsertVisible = False
         frameDelete.place_forget()
         frameDeleteVisible = False
+        frameCart.place_forget()
+        frameCartVisible = False
 
 def deleteFrame():
-    global frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible
+    global frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameCartVisible
     if frameDeleteVisible:
         frameDelete.place_forget()
         frameDeleteVisible = False
@@ -158,8 +172,11 @@ def deleteFrame():
         frameInsertVisible = False
         frameUpdate.place_forget()
         frameUpdateVisible = False
+        frameCart.place_forget()
+        frameCartVisible = False
 
-# Linha vertical personalizada
+# -----------------------> Linha vertical personalizada <-----------------------
+
 canvasLine = tk.Canvas(
     window,
     width=10,
@@ -173,7 +190,8 @@ canvasLine.place(x=200, y=100)
 canvasLine.configure(bg=purple)
 canvasLine.config(bd=0, highlightthickness=0)  # Remove bordas
 
-# Função para desenhar linha vertical com extremidades arredondadas
+# -----------------------> Função para desenhar linha vertical com extremidades arredondadas <-----------------------
+
 def drawRoundedLine(canvas, x, y1, y2, width, color):
     radius = width // 2
     # Desenha a linha vertical principal
@@ -201,7 +219,8 @@ def drawRoundedLine(canvas, x, y1, y2, width, color):
     )
 drawRoundedLine(canvasLine, 0, 0, 489, 10, "#987FAB")
 
-# Labels para informações do jogo e do usuário
+# -----------------------> Labels para informações do jogo e do usuário <-----------------------
+
 labelGameInformation = ttk.Label(frameSelect,
                                  text="Informação do Jogo",
                                  background=lightPurple,
@@ -214,14 +233,15 @@ labelPlayerInformation = ttk.Label(frameSelect,
                                    font=("Times New Roman", 20))
 labelPlayerInformation.place(x=20, y=360)
 
-labelCartInformation = ttk.Label(frameSelect,
+labelCartInformation = ttk.Label(frameCart,
                                  text="Carrinho",
-                                 background=lightPurple,
+                                 background=purple,
                                  font=("Times New Roman",20))
 
-labelCartInformation.place(x=1000, y=20)
+labelCartInformation.place(x=200, y=20)
 
-# Botões principais (CRUD)
+# -----------------------> Botões principais (CRUD) <-----------------------
+
 buttonSelect = customtkinter.CTkButton(master=window,
                                        text="Select",
                                        width=150,
@@ -273,12 +293,13 @@ buttonDelete = customtkinter.CTkButton(master=window,
                                        text_color="white",
                                        font=("Segoe UI", 20, "bold"),
                                        command=lambda: deleteFrame(),
-                                       image=insertImage,  # Observação: está usando insertImage em vez de deleteImage
+                                       image=deleteImage,
                                        compound="left",
                                        anchor="w")
 buttonDelete.place(x=20, y=480)
 
-# Botões de busca no frame Select
+# -----------------------> Botões de busca no frame Select <-----------------------
+
 buttonSearchIDGameSelect = customtkinter.CTkButton(master=frameSelect,
                                              text="ID do Jogo",
                                              width=50,
@@ -345,7 +366,8 @@ buttonSearchAgeGameSelect = customtkinter.CTkButton(master=frameSelect,
                                              command= lambda: selectFrame())
 buttonSearchAgeGameSelect.place(x=670, y=160)
 
-# Botões para busca de informações do usuário(Nome e ID)
+# -----------------------> Botões para busca de informações do usuário(Nome e ID) <-----------------------
+
 buttonSearchNamePlayer = customtkinter.CTkButton(master=frameSelect,
                                              text="Nome",
                                              width=100,
@@ -368,14 +390,9 @@ buttonSearchIDPlayer = customtkinter.CTkButton(master=frameSelect,
                                              command= lambda: selectFrame())
 buttonSearchIDPlayer.place(x=150, y=500)
 
-#Botão para busca de informação do carrinho
+# -----------------------> Botão para busca de informação do carrinho <-----------------------
 
-
-
-
-
-"""
-buttonSearchProductCart = customtkinter.CTkButton(master=frameSelect,
+buttonSearchProductCart = customtkinter.CTkButton(master=frameCart,
                                                   text="Produtos",
                                                   width=200,
                                                   height=85,
@@ -384,9 +401,9 @@ buttonSearchProductCart = customtkinter.CTkButton(master=frameSelect,
                                                   text_color="white",
                                                   font=("Segoe UI", 20, "bold"),
                                                   command= lambda: selectFrame())
-buttonSearchProductCart.place(x=950, y=160)
+buttonSearchProductCart.place(x=150, y=100)
 
-buttonViewCart = customtkinter.CTkButton(master=frameSelect,
+buttonViewCart = customtkinter.CTkButton(master=frameCart,
                                                   text="Ver o carrinho",
                                                   width=200,
                                                   height=85,
@@ -395,9 +412,9 @@ buttonViewCart = customtkinter.CTkButton(master=frameSelect,
                                                   text_color="white",
                                                   font=("Segoe UI", 20, "bold"),
                                                   command= lambda: selectFrame())
-buttonViewCart.place(x=800, y=540)
+buttonViewCart.place(x=20, y=460)
 
-buttonRemoveProductCart = customtkinter.CTkButton(master=frameSelect,
+buttonRemoveProductCart = customtkinter.CTkButton(master=frameCart,
                                                   text="Remover Produto",
                                                   width=200,
                                                   height=85,
@@ -406,7 +423,31 @@ buttonRemoveProductCart = customtkinter.CTkButton(master=frameSelect,
                                                   text_color="white",
                                                   font=("Segoe UI", 20, "bold"),
                                                   command= lambda: selectFrame())
-buttonRemoveProductCart.place(x=1090, y=540)
-"""
-# Inicia o loop principal da interface
+buttonRemoveProductCart.place(x=240, y=460)
+
+# -----------------------> Botões de inserir no frame Insert <-----------------------
+
+buttonInsertInformationGame = customtkinter.CTkButton(master=frameInsert,
+                                             text="Jogo",
+                                             width=50,
+                                             height=85,
+                                             fg_color="#3d2e4c",
+                                             hover_color="#a676b0",
+                                             text_color="white",
+                                             font=("Segoe UI", 20, "bold"),
+                                             command= lambda: insertFrame())
+buttonInsertInformationGame.place(x=540, y=40)
+
+buttonInsertInformationPlayer = customtkinter.CTkButton(master=frameInsert,
+                                             text="Usuário",
+                                             width=100,
+                                             height=85,
+                                             fg_color="#3d2e4c",
+                                             hover_color="#a676b0",
+                                             text_color="white",
+                                             font=("Segoe UI", 20, "bold"),
+                                             command= lambda: insertFrame())
+buttonInsertInformationPlayer.place(x=640, y=40)
+
+# -----------------------> Inicia o loop principal da interface <-----------------------
 window.mainloop()
