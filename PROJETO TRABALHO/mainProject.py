@@ -106,10 +106,6 @@ frameDelete.configure(background=lightPurple)
 frameCart = tk.Frame(window, width=470, height=600)
 frameCart.configure(background=lightPurple)
 
-# Frame para informações de jogadores/usuários
-framePlayer = tk.Frame(window, width=1300, height=600)
-framePlayer.configure(background=tiffany)  # Usa a cor Tiffany para diferenciação
-
 # -----------------------> Controle de visibilidade dos frames <-----------------------
 
 # Variáveis booleanas para rastrear qual frame está visível
@@ -124,8 +120,8 @@ framePlayerVisible = False
 # -----------------------> Funções para gerenciar a exibição dos frames <-----------------------
 
 def selectFrame():
-    """Controla a exibição do frame de seleção/consulta e carrinho"""
-    global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible, framePlayerVisible
+    #Controla a exibição do frame de seleção/consulta e carrinho
+    global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
 
     # Se o frame já está visível, esconde
     if frameSelectVisible:
@@ -147,16 +143,11 @@ def selectFrame():
         frameUpdateVisible = False
         frameDelete.place_forget()
         frameDeleteVisible = False
-        #frameGame.place_forget()
-        #frameGameVisible = False
-        framePlayer.place_forget()
-        framePlayerVisible = False
-
 
 # As funções seguintes seguem a mesma lógica para outros frames
 def insertFrame():
     """Controla a exibição do frame de inserção"""
-    global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible, frameGameVisible, framePlayerVisible
+    global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
     if frameInsertVisible:
         frameInsert.place_forget()
         frameInsertVisible = False
@@ -172,7 +163,6 @@ def insertFrame():
         frameDeleteVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        framePlayer.place_forget()
         framePlayerVisible = False
 
 
@@ -194,7 +184,6 @@ def updateFrame():
         frameDeleteVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        framePlayer.place_forget()
         framePlayerVisible = False
 
 
@@ -216,46 +205,92 @@ def deleteFrame():
         frameUpdateVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        framePlayer.place_forget()
-        framePlayerVisible = False
 
 def gameFrame():
-    #"""Controla a exibição do frame de informações de jogos"""
-    global frameGameVisible, labelEntryIDJogo, entryIDJogo, \
-        labelEntryNameGame, entryNameGame
+    #Controla a exibição do frame de informações de jogos
+    global frameGameVisible, \
+        labelEntryIDGame, entryIDGame, \
+        labelEntryNameGame, entryNameGame, \
+        labelEntryGenderGame, entryGenderGame, \
+        labelEntryPriceGame, entryPriceGame, \
+        labelEntryProducerGame, entryProducerGame, \
+        labelEntryAgeGame, entryAgeGame
+
     if frameGameVisible:
-        labelEntryIDJogo.place_forget()
-        entryIDJogo.place_forget()
+        labelEntryIDGame.place_forget()
         labelEntryNameGame.place_forget()
+        labelEntryGenderGame.place_forget()
+        labelEntryPriceGame.place_forget()
+        labelEntryProducerGame.place_forget()
+        labelEntryAgeGame.place_forget()
+
+        entryIDGame.place_forget()
         entryNameGame.place_forget()
+        entryGenderGame.place_forget()
+        entryPriceGame.place_forget()
+        entryProducerGame.place_forget()
+        entryAgeGame.place_forget()
+
         frameGameVisible = False
     else:
-        labelEntryIDJogo.place(x=200, y=165)
-        entryIDJogo.place(x=200, y=200)
+        labelEntryIDGame.place(x=200, y=165)
         labelEntryNameGame.place(x=410,y=165)
+        labelEntryGenderGame.place(x=620, y=165)
+        labelEntryPriceGame.place(x=830,y=165)
+        labelEntryProducerGame.place(x=1040, y=165)
+        labelEntryAgeGame.place(x=1250, y=165)
+
         entryNameGame.place(x=410,y=200)
+        entryIDGame.place(x=200, y=200)
+        entryGenderGame.place(x=620, y=200)
+        entryPriceGame.place(x=830,y=200)
+        entryProducerGame.place(x=1040, y=200)
+        entryAgeGame.place(x=1250, y=200)
+
         frameGameVisible = True
 
 def playerFrame():
-    #"""Controla a exibição do frame de informações de jogadores"""
-    global framePlayerVisible, frameGameVisible, frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameCartVisible
+    #Controla a exibição do frame de informações de jogadores
+    global framePlayerVisible, \
+        labelEntryIDPlayer, entryIDPlayer, \
+        labelEntryNamePlayer, entryNamePlayer, \
+        labelEntryAgePlayer, entryAgePlayer, \
+        labelEntryCountryPlayer, entryCountryPlayer, \
+        labelEntryStatusPlayer, entryStatusPlayer, \
+        labelEntryGamesCreatedPlayer , entryGamesCreatedPlayer
+
     if framePlayerVisible:
-        framePlayer.place_forget()
+        labelEntryIDPlayer.place_forget()
+        labelEntryNamePlayer.place_forget()
+        labelEntryAgePlayer.place_forget()
+        labelEntryCountryPlayer.place_forget()
+        labelEntryStatusPlayer.place_forget()
+        labelEntryGamesCreatedPlayer.place_forget()
+
+        entryIDPlayer.place_forget()
+        entryNamePlayer.place_forget()
+        entryAgePlayer.place_forget()
+        entryCountryPlayer.place_forget()
+        entryStatusPlayer.place_forget()
+        entryGamesCreatedPlayer.place_forget()
+
         framePlayerVisible = False
     else:
-        framePlayer.place(x=250, y=15)
+        labelEntryIDPlayer.place(x=200, y=165)
+        labelEntryNamePlayer.place(x=410, y=165)
+        labelEntryAgePlayer.place(x=620, y=165)
+        labelEntryCountryPlayer.place(x=830,y=165)
+        labelEntryStatusPlayer.place(x=1040, y=165)
+        labelEntryGamesCreatedPlayer.place(x=1250, y=165)
+
+        entryIDPlayer.place(x=410,y=200)
+        entryNamePlayer.place(x=200, y=200)
+        entryAgePlayer.place(x=620, y=200)
+        entryCountryPlayer.place(x=830,y=200)
+        entryStatusPlayer.place(x=1040, y=200)
+        entryGamesCreatedPlayer.place(x=1250, y=200)
+
         framePlayerVisible = True
-        # Esconde os outros frames
-        frameSelect.place_forget()
-        frameSelectVisible = False
-        frameInsert.place_forget()
-        frameInsertVisible = False
-        frameUpdate.place_forget()
-        frameUpdateVisible = False
-        frameDelete.place_forget()
-        frameDeleteVisible = False
-        frameCart.place_forget()
-        frameCartVisible = False
 
 
 # -----------------------> Elementos de design personalizados <-----------------------
@@ -545,22 +580,101 @@ buttonInsertInformationPlayer.place(x=640, y=40)
 
 # -----------------------> Campos de entrada no frame de jogos <-----------------------
 
-labelEntryIDJogo = ttk.Label(frameInsert,
+labelEntryIDGame = ttk.Label(frameInsert,
                              text="ID Jogo",
                              background=lightPurple,
                              font=("Calibri", 20))
 
-entryIDJogo = tk.Entry(frameInsert,width=20, bg=purple, fg=tiffany, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
-entryIDJogo.configure(bg=purple)
-
+entryIDGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryIDGame.configure(bg="#C6B4C9")
 
 labelEntryNameGame = ttk.Label(frameInsert,
                              text="Nome",
                              background=lightPurple,
                              font=("Calibri", 20))
 
-entryNameGame = tk.Entry(frameInsert,width=20, bg=purple, fg=tiffany, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
-entryNameGame.configure(bg=purple)
+entryNameGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryNameGame.configure(bg="#C6B4C9")
+
+labelEntryGenderGame = ttk.Label(frameInsert,
+                             text="Gênero",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryGenderGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryGenderGame.configure(bg="#C6B4C9")
+
+labelEntryPriceGame = ttk.Label(frameInsert,
+                             text="Preço",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryPriceGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryPriceGame.configure(bg="#C6B4C9")
+
+labelEntryProducerGame = ttk.Label(frameInsert,
+                             text="Gênero",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryProducerGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryProducerGame.configure(bg="#C6B4C9")
+
+labelEntryAgeGame = ttk.Label(frameInsert,
+                             text="Idade",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryAgeGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryAgeGame.configure(bg="#C6B4C9")
+
+labelEntryIDPlayer = ttk.Label(frameInsert,
+                             text="ID do Usuário",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryIDPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryIDPlayer.configure(bg="#C6B4C9")
+
+labelEntryNamePlayer = ttk.Label(frameInsert,
+                             text="Nome",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryNamePlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryNamePlayer.configure(bg="#C6B4C9")
+
+labelEntryAgePlayer = ttk.Label(frameInsert,
+                             text="Idade",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryAgePlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryAgePlayer.configure(bg="#C6B4C9")
+
+labelEntryCountryPlayer = ttk.Label(frameInsert,
+                                    text="País",
+                                    background=lightPurple,
+                                    font=("Calibri",20))
+
+entryCountryPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryAgePlayer.configure(bg="#C6B4C9")
+
+labelEntryStatusPlayer = ttk.Label(frameInsert,
+                                    text="Status",
+                                    background=lightPurple,
+                                    font=("Calibri",20))
+
+entryStatusPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryStatusPlayer.configure(bg="#C6B4C9")
+
+labelEntryGamesCreatedPlayer = ttk.Label(frameInsert,
+                                    text="Jogos Criados",
+                                    background=lightPurple,
+                                    font=("Calibri",20))
+
+entryGamesCreatedPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryGamesCreatedPlayer.configure(bg="#C6B4C9")
 
 # -----------------------> Inicia o loop principal da interface <-----------------------
 
