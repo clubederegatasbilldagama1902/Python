@@ -106,10 +106,6 @@ frameDelete.configure(background=lightPurple)
 frameCart = tk.Frame(window, width=470, height=600)
 frameCart.configure(background=lightPurple)
 
-# Frame para informações de jogos
-frameGame = tk.Frame(window, width=1300, height=600)
-frameGame.configure(background=lightPurple)
-
 # Frame para informações de jogadores/usuários
 framePlayer = tk.Frame(window, width=1300, height=600)
 framePlayer.configure(background=tiffany)  # Usa a cor Tiffany para diferenciação
@@ -125,12 +121,11 @@ frameCartVisible = False
 frameGameVisible = False
 framePlayerVisible = False
 
-
 # -----------------------> Funções para gerenciar a exibição dos frames <-----------------------
 
 def selectFrame():
     """Controla a exibição do frame de seleção/consulta e carrinho"""
-    global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible, frameGameVisible, framePlayerVisible
+    global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible, framePlayerVisible
 
     # Se o frame já está visível, esconde
     if frameSelectVisible:
@@ -152,8 +147,8 @@ def selectFrame():
         frameUpdateVisible = False
         frameDelete.place_forget()
         frameDeleteVisible = False
-        frameGame.place_forget()
-        frameGameVisible = False
+        #frameGame.place_forget()
+        #frameGameVisible = False
         framePlayer.place_forget()
         framePlayerVisible = False
 
@@ -177,8 +172,6 @@ def insertFrame():
         frameDeleteVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        frameGame.place_forget()
-        frameGameVisible = False
         framePlayer.place_forget()
         framePlayerVisible = False
 
@@ -201,8 +194,6 @@ def updateFrame():
         frameDeleteVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        frameGame.place_forget()
-        frameGameVisible = False
         framePlayer.place_forget()
         framePlayerVisible = False
 
@@ -228,33 +219,25 @@ def deleteFrame():
         framePlayer.place_forget()
         framePlayerVisible = False
 
-
 def gameFrame():
-    """Controla a exibição do frame de informações de jogos"""
-    global frameGameVisible, frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameCartVisible, framePlayerVisible
+    #"""Controla a exibição do frame de informações de jogos"""
+    global frameGameVisible, labelEntryIDJogo, entryIDJogo, \
+        labelEntryNameGame, entryNameGame
     if frameGameVisible:
-        frameGame.place_forget()
+        labelEntryIDJogo.place_forget()
+        entryIDJogo.place_forget()
+        labelEntryNameGame.place_forget()
+        entryNameGame.place_forget()
         frameGameVisible = False
     else:
-        frameGame.place(x=250, y=15)
+        labelEntryIDJogo.place(x=200, y=165)
+        entryIDJogo.place(x=200, y=200)
+        labelEntryNameGame.place(x=410,y=165)
+        entryNameGame.place(x=410,y=200)
         frameGameVisible = True
-        # Esconde os outros frames
-        frameSelect.place_forget()
-        frameSelectVisible = False
-        frameInsert.place_forget()
-        frameInsertVisible = False
-        frameUpdate.place_forget()
-        frameUpdateVisible = False
-        frameCart.place_forget()
-        frameCartVisible = False
-        frameDelete.place_forget()
-        frameDeleteVisible = False
-        framePlayer.place_forget()
-        framePlayerVisible = False
-
 
 def playerFrame():
-    """Controla a exibição do frame de informações de jogadores"""
+    #"""Controla a exibição do frame de informações de jogadores"""
     global framePlayerVisible, frameGameVisible, frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameCartVisible
     if framePlayerVisible:
         framePlayer.place_forget()
@@ -273,8 +256,6 @@ def playerFrame():
         frameDeleteVisible = False
         frameCart.place_forget()
         frameCartVisible = False
-        frameGame.place_forget()
-        frameGameVisible = False
 
 
 # -----------------------> Elementos de design personalizados <-----------------------
@@ -542,8 +523,8 @@ buttonRemoveProductCart.place(x=240, y=460)
 
 buttonInsertInformationGame = customtkinter.CTkButton(master=frameInsert,
                                                       text="Jogo",
-                                                      width=50,
-                                                      height=85,
+                                                      width=50, #largura
+                                                      height=85, #altura
                                                       fg_color="#3d2e4c",
                                                       hover_color="#a676b0",
                                                       text_color="white",
@@ -564,14 +545,22 @@ buttonInsertInformationPlayer.place(x=640, y=40)
 
 # -----------------------> Campos de entrada no frame de jogos <-----------------------
 
-labelEntryIDJogo = ttk.Label(frameGame,
+labelEntryIDJogo = ttk.Label(frameInsert,
                              text="ID Jogo",
                              background=lightPurple,
-                             font=("Times New Roman", 20))
-labelEntryIDJogo.place(x=200, y=165)
+                             font=("Calibri", 20))
 
-entryIDJogo = tk.Entry(frameGame, width=25, bg="#C6B4C9")  # Campo de entrada com fundo lilás claro
-entryIDJogo.place(x=200, y=200)
+entryIDJogo = tk.Entry(frameInsert,width=20, bg=purple, fg=tiffany, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryIDJogo.configure(bg=purple)
+
+
+labelEntryNameGame = ttk.Label(frameInsert,
+                             text="Nome",
+                             background=lightPurple,
+                             font=("Calibri", 20))
+
+entryNameGame = tk.Entry(frameInsert,width=20, bg=purple, fg=tiffany, font=("Calibri",20))  # Campo de entrada com fundo lilás claro
+entryNameGame.configure(bg=purple)
 
 # -----------------------> Inicia o loop principal da interface <-----------------------
 
