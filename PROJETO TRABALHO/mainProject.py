@@ -119,8 +119,6 @@ def selectFrame():
         frameDelete.place_forget()
         frameDeleteVisible = False
 
-# -----------------------> Funções similares para os outros frames <-----------------------
-
 def insertFrame():
     global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
     if frameInsertVisible:
