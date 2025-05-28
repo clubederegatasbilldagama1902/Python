@@ -81,13 +81,16 @@ frameInsert = tk.Frame(window, width=1300, height=600)
 frameInsert.configure(background=lightPurple)
 
 frameUpdate = tk.Frame(window, width=1300, height=600)
-frameUpdate.configure(background=lightGolden)
+frameUpdate.configure(background=lightPurple)
 
 frameDelete = tk.Frame(window, width=1300, height=600)
-frameDelete.configure(background=blue)
+frameDelete.configure(background=lightPurple)
 
 frameCart = tk.Frame(window, width=470, height=600)
-frameCart.configure(background=tiffany)
+frameCart.configure(background=lightPurple)
+
+frameGame = tk.Frame(window, width=1300, height=600)
+frameGame.configure(background=lightPurple)
 
 # -----------------------> Variáveis para controlar a visibilidade dos frames <-----------------------
 
@@ -96,6 +99,7 @@ frameInsertVisible = False
 frameUpdateVisible = False
 frameDeleteVisible = False
 frameCartVisible = False
+frameGameVisible = False
 
 # -----------------------> Funções para mostrar/esconder os frames <-----------------------
 
