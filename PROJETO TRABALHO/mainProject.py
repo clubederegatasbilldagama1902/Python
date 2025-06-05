@@ -21,7 +21,6 @@ purple = "#442e73"  # Roxo escuro (cor principal)
 light_purple = "#664983"  # Roxo mais claro
 light_lilac = "#987FAB"  # Lilás claro
 medium_lilac = "#A676B0"  # Lilás médio
-tiffany = "#0ABAB2"  # Azul esverdeado (estilo Tiffany)
 white = "#FFFFFF"  # Branco puro
 
 # -----------------------> CONFIGURAÇÃO DA JANELA PRINCIPAL <-----------------------
@@ -484,9 +483,7 @@ entry_games_created_player.configure(bg="#C6B4C9")
 # -----------------------> INÍCIA O LOOP PRINCIPAL DA INTERFACE <-----------------------
 
 if __name__ == "__main__":
-    from ButtonClass import AppButton
-
-    app_buttons = AppButton(
+      app_buttons = AppButton(
         window,
         light_purple,
         medium_lilac,
