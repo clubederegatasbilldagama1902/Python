@@ -1,21 +1,15 @@
 # -----------------------> IMPORTAÇÕES DE BIBLIOTECAS <-----------------------
 
-# Importações para interface gráfica e estilização
-import ttkbootstrap as ttk  # Framework para estilização do Tkinter
-from ttkbootstrap.constants import *  # Constantes do ttkbootstrap
-from ttkbootstrap.widgets import Separator  # Componente de separação visual
-import tkinter as tk  # Biblioteca padrão para GUI
-
-# Importações para componentes personalizados
-import customtkinter  # Biblioteca para widgets modernos
-from customtkinter import CTkImage  # Componente de imagem personalizado
-
-# Importações para manipulação de imagens
-import PIL  # Biblioteca Python Imaging Library
-from PIL import Image, ImageTk  # Classes para trabalhar com imagens
-
-# Importações para banco de dados
-import mysql.connector  # Conector para MySQL
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+from ttkbootstrap.widgets import Separator
+import tkinter as tk
+import customtkinter
+from customtkinter import CTkImage
+import PIL
+from PIL import Image
+from PIL import ImageTk
+from ButtonClass import AppButton
 import warnings  # Para gerenciar avisos
 
 warnings.filterwarnings("ignore", category=UserWarning)  # Ignora avisos específicos
@@ -24,9 +18,9 @@ warnings.filterwarnings("ignore", category=UserWarning)  # Ignora avisos especí
 
 # Cores Hexadecimais
 purple = "#442e73"  # Roxo escuro (cor principal)
-lightPurple = "#664983"  # Roxo mais claro
-lightLilac = "#987FAB"  # Lilás claro
-mediumLilac = "#A676B0"  # Lilás médio
+light_purple = "#664983"  # Roxo mais claro
+light_lilac = "#987FAB"  # Lilás claro
+medium_lilac = "#A676B0"  # Lilás médio
 tiffany = "#0ABAB2"  # Azul esverdeado (estilo Tiffany)
 white = "#FFFFFF"  # Branco puro
 
@@ -45,7 +39,7 @@ style = ttk.Style()  # Objeto para gerenciar estilos
 
 # Estilo personalizado para botões principais
 style.configure("Custom.TButton",
-                background=lightPurple,  # Cor de fundo
+                background=light_purple,  # Cor de fundo
                 foreground="white",  # Cor do texto
                 font=("Segoe UI", 14, "bold"),  # Fonte
                 padding=20,  # Espaçamento interno
@@ -56,7 +50,7 @@ style.map("Custom.TButton",
 
 # Segundo estilo de botão (pode ser usado para diferenciação)
 style.configure("CustomTwo.TButton",
-                background=lightPurple,
+                background=light_purple,
                 foreground="white",
                 font=("Segoe UI", 14, "bold"),
                 padding=20,
@@ -67,225 +61,235 @@ style.map("CustomTwo.TButton",
 # -----------------------> PREPARAÇÃO DE IMAGENS PARA OS BOTÕES <-----------------------
 
 # Função auxiliar para carregar e preparar imagens
-def loadImage(path, size=(25, 25)):
+def load_image(path, size=(25, 25)):
     # Carrega uma imagem, redimensiona e converte para formato Tkinter
     image = Image.open(path)
     image = image.resize(size)
     return ImageTk.PhotoImage(image)
 
 # Carrega ícones para os botões CRUD
-selectImage = loadImage("select.png")  # Ícone para select
-insertImage = loadImage("insert.png")  # Ícone para insert
-updateImage = loadImage("update.png")  # Ícone para update
-deleteImage = loadImage("delete.png")  # Ícone para delete
+select_image = load_image("select.png")  # Ícone para select
+insert_image = load_image("insert.png")  # Ícone para insert
+update_image = load_image("update.png")  # Ícone para update
+delete_image = load_image("delete.png")  # Ícone para delete
 
 # -----------------------> CRIAÇÃO DE FRAMES (ÁREAS DE CONTEÚDO) <-----------------------
 
 # Frame para operações de SELECT
-frameSelect = tk.Frame(window, width=800, height=600)
-frameSelect.configure(background=lightPurple)
+frame_select = tk.Frame(window, width=800, height=600)
+frame_select.configure(background=light_purple)
 
 # Frame para operações de INSERT
-frameInsert = tk.Frame(window, width=1300, height=600)
-frameInsert.configure(background=lightPurple)
+frame_insert = tk.Frame(window, width=1300, height=600)
+frame_insert.configure(background=light_purple)
 
 # Frame para operações de UPDATE
-frameUpdate = tk.Frame(window, width=1300, height=600)
-frameUpdate.configure(background=lightPurple)
+frame_update = tk.Frame(window, width=1300, height=600)
+frame_update.configure(background=light_purple)
 
 # Frame para operações de DELETE
-frameDelete = tk.Frame(window, width=1300, height=600)
-frameDelete.configure(background=lightPurple)
+frame_delete = tk.Frame(window, width=1300, height=600)
+frame_delete.configure(background=light_purple)
 
 # Frame para o carrinho de compras
-frameCart = tk.Frame(window, width=470, height=600)
-frameCart.configure(background=lightPurple)
+frame_cart = tk.Frame(window, width=470, height=600)
+frame_cart.configure(background=light_purple)
 
 # -----------------------> CONTROLE DE VISIBILIDADE DOS FRAMES <-----------------------
 
 # Variáveis booleanas para rastrear qual frame está visível
-frameSelectVisible = False
-frameInsertVisible = False
-frameUpdateVisible = False
-frameDeleteVisible = False
-frameCartVisible = False
-frameGameVisible = False
-framePlayerVisible = False
+frame_select_visible = False
+frame_insert_visible = False
+frame_update_visible = False
+frame_delete_visible = False
+frame_cart_visible = False
+frame_game_visible = False
+frame_player_visible = False
 
 # -----------------------> FUNÇÕES PARA GERENCIAR FRAMES <-----------------------
 
-def selectFrame():
+def select_frame():
     #Controla a exibição do frame de seleção/consulta e carrinho
-    global frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
+    global frame_select_visible, frame_insert_visible, frame_update_visible, frame_delete_visible, frame_cart_visible
 
     # Se o frame já está visível, esconde
-    if frameSelectVisible:
-        frameSelect.place_forget()
-        frameSelectVisible = False
-        frameCart.place_forget()
-        frameCartVisible = False
+    if frame_select_visible:
+        frame_select.place_forget()
+        frame_select_visible = False
+        frame_cart.place_forget()
+        frame_cart_visible = False
     else:
         # Mostra o frame de seleção e carrinho
-        frameSelect.place(x=250, y=15)
-        frameSelectVisible = True
-        frameCart.place(x=1055, y=15)
-        frameCartVisible = True
+        frame_select.place(x=250, y=15)
+        frame_select_visible = True
+        frame_cart.place(x=1055, y=15)
+        frame_cart_visible = True
 
         # Esconde todos os outros frames
-        frameInsert.place_forget()
-        frameInsertVisible = False
-        frameUpdate.place_forget()
-        frameUpdateVisible = False
-        frameDelete.place_forget()
-        frameDeleteVisible = False
+        frame_insert.place_forget()
+        frame_insert_visible = False
+        frame_update.place_forget()
+        frame_update_visible = False
+        frame_delete.place_forget()
+        frame_delete_visible = False
 
-def insertFrame():  #Controla a exibição do frame de inserção
-    global frameInsertVisible, frameSelectVisible, frameUpdateVisible, frameDeleteVisible, frameCartVisible
-    if frameInsertVisible:
-        frameInsert.place_forget()
-        frameInsertVisible = False
+
+def insert_frame():  #Controla a exibição do frame de inserção
+    global frame_insert_visible, frame_select_visible, frame_update_visible, frame_delete_visible, frame_cart_visible
+    if frame_insert_visible:
+        frame_insert.place_forget()
+        frame_insert_visible = False
     else:
-        frameInsert.place(x=250, y=15)
-        frameInsertVisible = True
+        frame_insert.place(x=250, y=15)
+        frame_insert_visible = True
         # Esconde os outros frames
-        frameSelect.place_forget()
-        frameUpdate.place_forget()
-        frameDelete.place_forget()
-        frameCart.place_forget()
+        frame_select.place_forget()
+        frame_update.place_forget()
+        frame_delete.place_forget()
+        frame_cart.place_forget()
 
-        frameSelectVisible = False
-        frameUpdateVisible = False
-        frameDeleteVisible = False
-        frameCartVisible = False
+        frame_select_visible = False
+        frame_update_visible = False
+        frame_delete_visible = False
+        frame_cart_visible = False
 
-def updateFrame():  #Controla a exibição do frame de UPDATE
-    global frameUpdateVisible, frameSelectVisible, frameInsertVisible, frameDeleteVisible, frameCartVisible
-    if frameUpdateVisible:
-        frameUpdate.place_forget()
-        frameUpdateVisible = False
+def update_frame():  #Controla a exibição do frame de UPDATE
+    global frame_update_visible, frame_select_visible, frame_insert_visible, frame_delete_visible, frame_cart_visible
+    if frame_update_visible:
+        frame_update.place_forget()
+        frame_update_visible = False
     else:
-        frameUpdate.place(x=250, y=15)
-        frameUpdateVisible = True
+        frame_update.place(x=250, y=15)
+        frame_update_visible = True
         # Esconde os outros frames
-        frameSelect.place_forget()
-        frameInsert.place_forget()
-        frameDelete.place_forget()
-        frameCart.place_forget()
+        frame_select.place_forget()
+        frame_insert.place_forget()
+        frame_delete.place_forget()
+        frame_cart.place_forget()
 
-        frameSelectVisible = False
-        frameInsertVisible = False
-        frameDeleteVisible = False
-        frameCartVisible = False
+        frame_select_visible = False
+        frame_insert_visible = False
+        frame_delete_visible = False
+        frame_cart_visible = False
 
-def deleteFrame():      #Controla a exibição do frame de DELETE
-    global frameDeleteVisible, frameSelectVisible, frameInsertVisible, frameUpdateVisible, frameCartVisible
-    if frameDeleteVisible:
-        frameDelete.place_forget()
-        frameDeleteVisible = False
+
+def delete_frame():  #Controla a exibição do frame de DELETE
+    global frame_delete_visible, frame_select_visible, frame_insert_visible, frame_update_visible, frame_cart_visible
+    if frame_delete_visible:
+        frame_delete.place_forget()
+        frame_delete_visible = False
     else:
-        frameDelete.place(x=250, y=15)
-        frameDeleteVisible = True
+        frame_delete.place(x=250, y=15)
+        frame_delete_visible = True
         # Esconde os outros frames
-        frameSelect.place_forget()
-        frameInsert.place_forget()
-        frameUpdate.place_forget()
-        frameCart.place_forget()
+        frame_select.place_forget()
+        frame_insert.place_forget()
+        frame_update.place_forget()
+        frame_cart.place_forget()
 
-        frameSelectVisible = False
-        frameInsertVisible = False
-        frameUpdateVisible = False
-        frameCartVisible = False
+        frame_select_visible = False
+        frame_insert_visible = False
+        frame_update_visible = False
+        frame_cart_visible = False
 
-def gameFrame():    #Controla a exibição do frame de informações de jogos
-    global frameGameVisible, framePlayerVisible, \
-        labelEntryIDGame, entryIDGame, \
-        labelEntryNameGame, entryNameGame, \
-        labelEntryGenderGame, entryGenderGame, \
-        labelEntryPriceGame, entryPriceGame, \
-        labelEntryProducerGame, entryProducerGame, \
-        labelEntryAgeGame, entryAgeGame
 
-    if frameGameVisible:
-        labelEntryIDGame.place_forget()
-        labelEntryNameGame.place_forget()
-        labelEntryGenderGame.place_forget()
-        labelEntryPriceGame.place_forget()
-        labelEntryProducerGame.place_forget()
-        labelEntryAgeGame.place_forget()
+def game_frame():    #Controla a exibição do frame de informações de jogos
+    global frame_game_visible, frame_player_visible, \
+        label_entry_id_game, entry_id_game, \
+        label_entry_name_game, entry_name_game, \
+        label_entry_gender_game, entry_gender_game, \
+        label_entry_price_game, entry_price_game, \
+        label_entry_producer_game, entry_producer_game, \
+        label_entry_age_game, entry_age_game
 
-        entryIDGame.place_forget()
-        entryNameGame.place_forget()
-        entryGenderGame.place_forget()
-        entryPriceGame.place_forget()
-        entryProducerGame.place_forget()
-        entryAgeGame.place_forget()
+    if frame_game_visible:
+        label_entry_id_game .place_forget()
+        label_entry_name_game .place_forget()
+        label_entry_gender_game.place_forget()
+        label_entry_price_game .place_forget()
+        label_entry_producer_game.place_forget()
+        label_entry_age_game.place_forget()
 
-        frameGameVisible = False
+        entry_id_game.place_forget()
+        entry_name_game.place_forget()
+        entry_gender_game.place_forget()
+        entry_price_game.place_forget()
+        entry_producer_game.place_forget()
+        entry_age_game.place_forget()
+
+        frame_game_visible = False
+
     else:
-        labelEntryIDGame.place(x=30, y=165)
-        labelEntryNameGame.place(x=190,y=165)
-        labelEntryGenderGame.place(x=350, y=165)
-        labelEntryPriceGame.place(x=510,y=165)
-        labelEntryProducerGame.place(x=670, y=165)
-        labelEntryAgeGame.place(x=830, y=165)
+        # Posição dos Labels
+        label_entry_id_game.place(x=30, y=165)
+        label_entry_name_game.place(x=190,y=165)
+        label_entry_gender_game.place(x=350, y=165)
+        label_entry_price_game.place(x=510,y=165)
+        label_entry_producer_game.place(x=670, y=165)
+        label_entry_age_game.place(x=830, y=165)
 
-        entryIDGame.place(x=30, y=200)
-        entryNameGame.place(x=190,y=200)
-        entryGenderGame.place(x=350, y=200)
-        entryPriceGame.place(x=510,y=200)
-        entryProducerGame.place(x=670, y=200)
-        entryAgeGame.place(x=830, y=200)
+        # Posição dos Campos de Entrada
+        entry_id_game.place(x=30, y=200)
+        entry_name_game.place(x=190,y=200)
+        entry_gender_game.place(x=350, y=200)
+        entry_price_game.place(x=510,y=200)
+        entry_producer_game.place(x=670, y=200)
+        entry_age_game.place(x=830, y=200)
 
-        frameGameVisible = True
-        framePlayerVisible = False
+        frame_game_visible = True
+        frame_player_visible = False
 
-def playerFrame():  #Controla a exibição do frame de informações de jogadores
-    global framePlayerVisible, frameGameVisible, \
-        labelEntryIDPlayer, entryIDPlayer, \
-        labelEntryNamePlayer, entryNamePlayer, \
-        labelEntryAgePlayer, entryAgePlayer, \
-        labelEntryCountryPlayer, entryCountryPlayer, \
-        labelEntryStatusPlayer, entryStatusPlayer, \
-        labelEntryGamesCreatedPlayer, entryGamesCreatedPlayer
 
-    if framePlayerVisible:
-        labelEntryIDPlayer.place_forget()
-        labelEntryNamePlayer.place_forget()
-        labelEntryAgePlayer.place_forget()
-        labelEntryCountryPlayer.place_forget()
-        labelEntryStatusPlayer.place_forget()
-        labelEntryGamesCreatedPlayer.place_forget()
+def player_frame():     #Controla a exibição do frame de informações de jogadores
+    global frame_player_visible, frame_game_visible, \
+        label_entry_id_player, entry_id_player, \
+        label_entry_name_player, entry_name_player, \
+        label_entry_age_player, entry_age_player, \
+        label_entry_country_player, entry_country_player, \
+        label_entry_status_player, entry_status_player, \
+        label_entry_games_created_player, entry_games_created_player
 
-        entryIDPlayer.place_forget()
-        entryNamePlayer.place_forget()
-        entryAgePlayer.place_forget()
-        entryCountryPlayer.place_forget()
-        entryStatusPlayer.place_forget()
-        entryGamesCreatedPlayer.place_forget()
+    if frame_player_visible:
+        label_entry_id_player.place_forget()
+        label_entry_name_player.place_forget()
+        label_entry_age_player.place_forget()
+        label_entry_country_player.place_forget()
+        label_entry_status_player.place_forget()
+        label_entry_games_created_player.place_forget()
 
-        framePlayerVisible = False
+        entry_id_player.place_forget()
+        entry_name_player.place_forget()
+        entry_age_player.place_forget()
+        entry_country_player.place_forget()
+        entry_status_player.place_forget()
+        entry_games_created_player.place_forget()
+
+        frame_player_visible = False
+
     else:
-        labelEntryIDPlayer.place(x=30, y=165)
-        labelEntryNamePlayer.place(x=190,y=165)
-        labelEntryAgePlayer.place(x=350, y=165)
-        labelEntryCountryPlayer.place(x=510,y=165)
-        labelEntryStatusPlayer.place(x=670, y=165)
-        labelEntryGamesCreatedPlayer.place(x=830, y=165)
+        # Posição dos Labels
+        label_entry_id_player.place(x=30, y=165)
+        label_entry_name_player.place(x=190,y=165)
+        label_entry_age_player.place(x=350, y=165)
+        label_entry_country_player.place(x=510,y=165)
+        label_entry_status_player.place(x=670, y=165)
+        label_entry_games_created_player.place(x=830, y=165)
 
-        entryIDPlayer.place(x=30,y=200)
-        entryNamePlayer.place(x=190,y=200)
-        entryAgePlayer.place(x=350, y=200)
-        entryCountryPlayer.place(x=510,y=200)
-        entryStatusPlayer.place(x=670, y=200)
-        entryGamesCreatedPlayer.place(x=830, y=200)
+        # Posição dos Campos de Entrada
+        entry_id_player.place(x=30,y=200)
+        entry_name_player.place(x=190,y=200)
+        entry_age_player.place(x=350, y=200)
+        entry_country_player.place(x=510,y=200)
+        entry_status_player.place(x=670, y=200)
+        entry_games_created_player.place(x=830, y=200)
 
-        framePlayerVisible = True
-        frameGameVisible = False
+        frame_player_visible = True
+        frame_game_visible = False
 
 # -----------------------> ELEMENTOS VISUAIS ADICIONAIS <-----------------------
 
 # Cria uma linha vertical decorativa com extremidades arredondadas
-canvasLine = tk.Canvas(
+canvas_line = tk.Canvas(
     window,
     width=10,
     height=520,
@@ -294,12 +298,11 @@ canvasLine = tk.Canvas(
     borderwidth=0,  # Remove borda
     relief='flat'  # Estilo plano
 )
-canvasLine.place(x=200, y=100)
-canvasLine.configure(bg=purple)
-canvasLine.config(bd=0, highlightthickness=0)  # Remove bordas
+canvas_line.place(x=200, y=100)
+canvas_line.configure(bg=purple)
+canvas_line.config(bd=0, highlightthickness=0)  # Remove bordas
 
-
-def drawRoundedLine(canvas, x, y1, y2, width, color):
+def draw_rounded_line(canvas, x, y1, y2, width, color):
     # Desenha uma linha vertical com extremidades arredondadas
     radius = width // 2
     # Desenha a linha vertical principal
@@ -326,380 +329,184 @@ def drawRoundedLine(canvas, x, y1, y2, width, color):
         width=0
     )
 
-
 # Aplica a função para desenhar a linha
-drawRoundedLine(canvasLine, 0, 0, 489, 10, lightLilac)
+draw_rounded_line(canvas_line, 0, 0, 489, 10, light_lilac)
 
 # -----------------------> LABELS INFORMATIVOS <-----------------------
 
 # Label para seção de informações do jogo
-labelGameInformation = ttk.Label(frameSelect,
+label_game_information = ttk.Label(frame_select,
                                  text="Informação do Jogo",
-                                 background=lightPurple,
+                                 background=light_purple,
                                  font=("Times New Roman", 20))
-labelGameInformation.place(x=20, y=20)
+label_game_information.place(x=20, y=20)
 
 # Label para seção de informações do usuário
-labelPlayerInformation = ttk.Label(frameSelect,
+label_player_information = ttk.Label(frame_select,
                                    text="Informação do Usuário",
-                                   background=lightPurple,
+                                   background=light_purple,
                                    font=("Times New Roman", 20))
-labelPlayerInformation.place(x=20, y=360)
+label_player_information.place(x=20, y=360)
 
 # Label para o carrinho
-labelCartInformation = ttk.Label(frameCart,
+label_cart_information = ttk.Label(frame_cart,
                                  text="Carrinho",
                                  background=purple,
                                  font=("Times New Roman", 20))
-labelCartInformation.place(x=200, y=20)
-
-# -----------------------> BOTÕES PRINCIPAIS (CRUD) <-----------------------
-
-# Botão para operações SELECT
-buttonSelect = customtkinter.CTkButton(master=window,
-                                       text="Select",
-                                       width=150,
-                                       height=90,
-                                       fg_color=lightPurple,  # Cor de fundo
-                                       hover_color=mediumLilac,  # Cor ao passar mouse
-                                       text_color="white",  # Cor do texto
-                                       font=("Segoe UI", 20, "bold"),  # Fonte
-                                       command=lambda: selectFrame(),  # Ação ao clicar
-                                       image=selectImage,  # Ícone
-                                       compound="left",  # Posição do ícone
-                                       anchor="w")  # Alinhamento
-buttonSelect.place(x=20, y=120)
-
-# Botão para operações INSERT - estrutura similar
-buttonInsert = customtkinter.CTkButton(master=window,
-                                       text="Insert",
-                                       width=150,
-                                       height=90,
-                                       fg_color=lightPurple,
-                                       hover_color=mediumLilac,
-                                       text_color="white",
-                                       font=("Segoe UI", 20, "bold"),
-                                       command=lambda: insertFrame(),
-                                       image=insertImage,
-                                       compound="left",
-                                       anchor="w")
-buttonInsert.place(x=20, y=240)
-
-# Botão para operações UPDATE
-buttonUpdate = customtkinter.CTkButton(master=window,
-                                       text="Update",
-                                       width=150,
-                                       height=90,
-                                       fg_color=lightPurple,
-                                       hover_color=mediumLilac,
-                                       text_color="white",
-                                       font=("Segoe UI", 20, "bold"),
-                                       command=lambda: updateFrame(),
-                                       image=updateImage,
-                                       compound="left",
-                                       anchor="w")
-buttonUpdate.place(x=20, y=360)
-
-# Botão para operações DELETE
-buttonDelete = customtkinter.CTkButton(master=window,
-                                       text="Delete",
-                                       width=150,
-                                       height=90,
-                                       fg_color=lightPurple,
-                                       hover_color=mediumLilac,
-                                       text_color="white",
-                                       font=("Segoe UI", 20, "bold"),
-                                       command=lambda: deleteFrame(),
-                                       image=deleteImage,
-                                       compound="left",
-                                       anchor="w")
-buttonDelete.place(x=20, y=480)
-
-# ----------------------> BOTÕES DE BUSCA NO FRAME SELECT <-----------------------
-
-# Botões para buscar jogos por diferentes critérios
-buttonSearchIDGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                   text="ID do Jogo",
-                                                   width=50,
-                                                   height=85,
-                                                   fg_color="#3d2e4c",  # Roxo mais escuro
-                                                   hover_color="#a676b0",  # Lilás
-                                                   text_color="white",
-                                                   font=("Segoe UI", 20, "bold"),
-                                                   command=lambda: selectFrame())
-buttonSearchIDGameSelect.place(x=20, y=160)
-
-buttonSearchNameGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                     text="Nome",
-                                                     width=100,
-                                                     height=85,
-                                                     fg_color="#3d2e4c",
-                                                     hover_color="#a676b0",
-                                                     text_color="white",
-                                                     font=("Segoe UI", 20, "bold"),
-                                                     command=lambda: selectFrame())
-buttonSearchNameGameSelect.place(x=150, y=160)
-
-buttonSearchGenderGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                       text="Gênero",
-                                                       width=100,
-                                                       height=85,
-                                                       fg_color="#3d2e4c",
-                                                       hover_color="#a676b0",
-                                                       text_color="white",
-                                                       font=("Segoe UI", 20, "bold"),
-                                                       command=lambda: selectFrame())
-buttonSearchGenderGameSelect.place(x=280, y=160)
-
-buttonSearchPriceGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                      text="Preço",
-                                                      width=100,
-                                                      height=85,
-                                                      fg_color="#3d2e4c",
-                                                      hover_color="#a676b0",
-                                                      text_color="white",
-                                                      font=("Segoe UI", 20, "bold"),
-                                                      command=lambda: selectFrame())
-buttonSearchPriceGameSelect.place(x=410, y=160)
-
-buttonSearchProducerGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                         text="Produtor",
-                                                         width=100,
-                                                         height=85,
-                                                         fg_color="#3d2e4c",
-                                                         hover_color="#a676b0",
-                                                         text_color="white",
-                                                         font=("Segoe UI", 20, "bold"),
-                                                         command=lambda: selectFrame())
-buttonSearchProducerGameSelect.place(x=540, y=160)
-
-buttonSearchAgeGameSelect = customtkinter.CTkButton(master=frameSelect,
-                                                    text="Idade",
-                                                    width=100,
-                                                    height=85,
-                                                    fg_color="#3d2e4c",
-                                                    hover_color="#a676b0",
-                                                    text_color="white",
-                                                    font=("Segoe UI", 20, "bold"),
-                                                    command=lambda: selectFrame())
-buttonSearchAgeGameSelect.place(x=670, y=160)
-
-# -----------------------> BOTÕES PARA BUSCA DE USUÁRIOS <-----------------------
-
-buttonSearchNamePlayerSelect = customtkinter.CTkButton(master=frameSelect,
-                                                 text="Nome",
-                                                 width=100,
-                                                 height=85,
-                                                 fg_color="#3d2e4c",
-                                                 hover_color="#a676b0",
-                                                 text_color="white",
-                                                 font=("Segoe UI", 20, "bold"),
-                                                 command=lambda: selectFrame())
-buttonSearchNamePlayerSelect.place(x=20, y=500)
-
-buttonSearchIDPlayerSelect = customtkinter.CTkButton(master=frameSelect,
-                                               text="Id do Usuário",
-                                               width=100,
-                                               height=85,
-                                               fg_color="#3d2e4c",
-                                               hover_color="#a676b0",
-                                               text_color="white",
-                                               font=("Segoe UI", 20, "bold"),
-                                               command=lambda: selectFrame())
-buttonSearchIDPlayerSelect.place(x=150, y=500)
-
-# -----------------------> BOTÕES PARA O CARRINHO <-----------------------
-
-buttonSearchProductCartSelect = customtkinter.CTkButton(master=frameCart,
-                                                  text="Produtos",
-                                                  width=200,
-                                                  height=85,
-                                                  fg_color="#3d2e4c",
-                                                  hover_color="#a676b0",
-                                                  text_color="white",
-                                                  font=("Segoe UI", 20, "bold"),
-                                                  command=lambda: selectFrame())
-buttonSearchProductCartSelect.place(x=150, y=100)
-
-buttonViewCart = customtkinter.CTkButton(master=frameCart,
-                                         text="Ver o carrinho",
-                                         width=200,
-                                         height=85,
-                                         fg_color="#3d2e4c",
-                                         hover_color="#a676b0",
-                                         text_color="white",
-                                         font=("Segoe UI", 20, "bold"),
-                                         command=lambda: selectFrame())
-buttonViewCart.place(x=20, y=460)
-
-buttonRemoveProductCartSelect = customtkinter.CTkButton(master=frameCart,
-                                                  text="Remover Produto",
-                                                  width=200,
-                                                  height=85,
-                                                  fg_color="#3d2e4c",
-                                                  hover_color="#a676b0",
-                                                  text_color="white",
-                                                  font=("Segoe UI", 20, "bold"),
-                                                  command=lambda: selectFrame())
-buttonRemoveProductCartSelect.place(x=240, y=460)
-
-# -----------------------> BOTÕES NO FRAME DE INSERÇÃO <-----------------------
-
-buttonInsertInformationGameInsert = customtkinter.CTkButton(master=frameInsert,
-                                                      text="Jogo",
-                                                      width=100,
-                                                      height=85,
-                                                      fg_color="#3d2e4c",
-                                                      hover_color="#a676b0",
-                                                      text_color="white",
-                                                      font=("Segoe UI", 20, "bold"),
-                                                      command=lambda: gameFrame())
-buttonInsertInformationGameInsert.place(x=520, y=40)
-
-buttonInsertInformationPlayerInsert = customtkinter.CTkButton(master=frameInsert,
-                                                        text="Usuário",
-                                                        width=100,
-                                                        height=85,
-                                                        fg_color="#3d2e4c",
-                                                        hover_color="#a676b0",
-                                                        text_color="white",
-                                                        font=("Segoe UI", 20, "bold"),
-                                                        command=lambda: gameFrame())
-buttonInsertInformationPlayerInsert.place(x=640, y=40)
-
-buttonInsertfromGameAndPlayer = customtkinter.CTkButton(master=frameInsert,
-                                                        text="Inserir",
-                                                        width=100,
-                                                        height=85,
-                                                        fg_color="#3d2e4c",
-                                                        hover_color="#a676b0",
-                                                        text_color="white",
-                                                        font=("Segoe UI", 20, "bold"),
-                                                        command=lambda: gameFrame())
-buttonInsertfromGameAndPlayer.place(x=580, y=500)
+label_cart_information.place(x=200, y=20)
 
 # -----------------------> CAMPOS DE ENTRADA NO FRAME DE JOGOS <-----------------------
 
+# >>>>>>>>>>>>>> JOGO <<<<<<<<<<<<<<
+
 # Label para o campo de ID do Jogo
-labelEntryIDGame = ttk.Label(frameInsert,
+label_entry_id_game = ttk.Label(frame_insert,
                              text="ID Jogo",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o ID do Jogo
-entryIDGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryIDGame.configure(bg="#C6B4C9")
+entry_id_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_id_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Nome do Jogo
-labelEntryNameGame = ttk.Label(frameInsert,
+label_entry_name_game = ttk.Label(frame_insert,
                              text="Nome",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o Nome do Jogo
-entryNameGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryNameGame.configure(bg="#C6B4C9")
+entry_name_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_name_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Gênero do Jogo
-labelEntryGenderGame = ttk.Label(frameInsert,
+label_entry_gender_game = ttk.Label(frame_insert,
                              text="Gênero",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o Gênero do Jogo
-entryGenderGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryGenderGame.configure(bg="#C6B4C9")
+entry_gender_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_gender_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Preço do Jogo
-labelEntryPriceGame = ttk.Label(frameInsert,
+label_entry_price_game = ttk.Label(frame_insert,
                              text="Preço",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o Preço do Jogo
-entryPriceGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryPriceGame.configure(bg="#C6B4C9")
+entry_price_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_price_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Produtora do Jogo
-labelEntryProducerGame = ttk.Label(frameInsert,
+label_entry_producer_game = ttk.Label(frame_insert,
                              text="Produtora",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para a Produtora do Jogo
-entryProducerGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryProducerGame.configure(bg="#C6B4C9")
+entry_producer_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_producer_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Idade indicada do Jogo
-labelEntryAgeGame = ttk.Label(frameInsert,
+label_entry_age_game = ttk.Label(frame_insert,
                              text="Idade",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para a Idade indicada do Jogo
-entryAgeGame = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryAgeGame.configure(bg="#C6B4C9")
+entry_age_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_age_game.configure(bg="#C6B4C9")
 
-# Label para o campo de ID do Usuário (Jogador)
-labelEntryIDPlayer = ttk.Label(frameInsert,
+# >>>>>>>>>>>>>> USUÁRIO <<<<<<<<<<<<<<
+
+# Label para o campo de ID do Usuário
+label_entry_id_player = ttk.Label(frame_insert,
                              text="ID do Usuário",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o ID do Usuário
-entryIDPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryIDPlayer.configure(bg="#C6B4C9")
+entry_id_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_id_player.configure(bg="#C6B4C9")
 
 # Label para o campo de Nome do Usuário
-labelEntryNamePlayer = ttk.Label(frameInsert,
+label_entry_name_player = ttk.Label(frame_insert,
                              text="Nome",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para o Nome do Usuário
-entryNamePlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryNamePlayer.configure(bg="#C6B4C9")
+entry_name_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_name_player.configure(bg="#C6B4C9")
 
 # Label para o campo de Idade do Usuário
-labelEntryAgePlayer = ttk.Label(frameInsert,
+label_entry_age_player = ttk.Label(frame_insert,
                              text="Idade",
-                             background=lightPurple,
+                             background=light_purple,
                              font=("Calibri", 20))
 
 # Campo de entrada para a Idade do Usuário
-entryAgePlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryAgePlayer.configure(bg="#C6B4C9")
+entry_age_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_age_player.configure(bg="#C6B4C9")
 
 # Label para o campo de País do Usuário
-labelEntryCountryPlayer = ttk.Label(frameInsert,
+label_entry_country_player = ttk.Label(frame_insert,
                                     text="País",
-                                    background=lightPurple,
+                                    background=light_purple,
                                     font=("Calibri",20))
 
 # Campo de entrada para o País do Usuário
-entryCountryPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryCountryPlayer.configure(bg="#C6B4C9")
+entry_country_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_country_player.configure(bg="#C6B4C9")
 
 # Label para o campo de Status do Usuário
-labelEntryStatusPlayer = ttk.Label(frameInsert,
+label_entry_status_player = ttk.Label(frame_insert,
                                     text="Status",
-                                    background=lightPurple,
+                                    background=light_purple,
                                     font=("Calibri",20))
 
 # Campo de entrada para o Status do Usuário
-entryStatusPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryStatusPlayer.configure(bg="#C6B4C9")
+entry_status_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_status_player.configure(bg="#C6B4C9")
 
 # Label para o campo de quantidade de Jogos Criados pelo Usuário
-labelEntryGamesCreatedPlayer = ttk.Label(frameInsert,
+label_entry_games_created_player = ttk.Label(frame_insert,
                                     text="Jogos Criados",
-                                    background=lightPurple,
+                                    background=light_purple,
                                     font=("Calibri",20))
 
 # Campo de entrada para a quantidade de Jogos Criados pelo Usuário
-entryGamesCreatedPlayer = tk.Entry(frameInsert,width=20, bg=purple, fg=lightPurple, font=("Calibri",10))
-entryGamesCreatedPlayer.configure(bg="#C6B4C9")
+entry_games_created_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
+entry_games_created_player.configure(bg="#C6B4C9")
 
 # -----------------------> INÍCIA O LOOP PRINCIPAL DA INTERFACE <-----------------------
 
-window.mainloop()  # Mantém a janela aberta e responde a eventos
+if __name__ == "__main__":
+    from ButtonClass import AppButton
+
+    app_buttons = AppButton(
+        window,
+        light_purple,
+        medium_lilac,
+        frame_select,
+        frame_insert,
+        frame_cart,
+        select_image,
+        insert_image,
+        update_image,
+        delete_image,
+        select_frame,
+        insert_frame,
+        update_frame,
+        delete_frame,
+        game_frame)
+
+    # Criação dos botões
+    app_buttons.create_main_buttons()
+    app_buttons.create_select_frame_buttons()
+    app_buttons.create_cart_frame_buttons()
+    app_buttons.create_insert_frame_buttons()
+
+    window.mainloop()
