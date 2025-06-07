@@ -9,6 +9,7 @@ from customtkinter import CTkImage
 import PIL
 from PIL import Image
 from PIL import ImageTk
+from FrameClass import *
 from ButtonClass import AppButton
 import warnings  # Para gerenciar avisos
 
@@ -75,24 +76,11 @@ delete_image = load_image("delete.png")  # Ícone para delete
 # -----------------------> CRIAÇÃO DE FRAMES (ÁREAS DE CONTEÚDO) <-----------------------
 
 # Frame para operações de SELECT
-frame_select = tk.Frame(window, width=800, height=600)
-frame_select.configure(background=light_purple)
-
-# Frame para operações de INSERT
-frame_insert = tk.Frame(window, width=1300, height=600)
-frame_insert.configure(background=light_purple)
-
-# Frame para operações de UPDATE
-frame_update = tk.Frame(window, width=1300, height=600)
-frame_update.configure(background=light_purple)
-
-# Frame para operações de DELETE
-frame_delete = tk.Frame(window, width=1300, height=600)
-frame_delete.configure(background=light_purple)
-
-# Frame para o carrinho de compras
-frame_cart = tk.Frame(window, width=470, height=600)
-frame_cart.configure(background=light_purple)
+frame_select = SelectFrame(window)
+frame_insert = InsertFrame(window)
+frame_update = UpdateFrame(window)
+frame_delete = DeleteFrame(window)
+frame_cart = CartFrame(window)
 
 # -----------------------> CONTROLE DE VISIBILIDADE DOS FRAMES <-----------------------
 
@@ -331,159 +319,11 @@ def draw_rounded_line(canvas, x, y1, y2, width, color):
 # Aplica a função para desenhar a linha
 draw_rounded_line(canvas_line, 0, 0, 489, 10, light_lilac)
 
-# -----------------------> LABELS INFORMATIVOS <-----------------------
-
-# Label para seção de informações do jogo
-label_game_information = ttk.Label(frame_select,
-                                 text="Informação do Jogo",
-                                 background=light_purple,
-                                 font=("Times New Roman", 20))
-label_game_information.place(x=20, y=20)
-
-# Label para seção de informações do usuário
-label_player_information = ttk.Label(frame_select,
-                                   text="Informação do Usuário",
-                                   background=light_purple,
-                                   font=("Times New Roman", 20))
-label_player_information.place(x=20, y=360)
-
-# Label para o carrinho
-label_cart_information = ttk.Label(frame_cart,
-                                 text="Carrinho",
-                                 background=purple,
-                                 font=("Times New Roman", 20))
-label_cart_information.place(x=200, y=20)
-
-# -----------------------> CAMPOS DE ENTRADA NO FRAME DE JOGOS <-----------------------
-
-# >>>>>>>>>>>>>> JOGO <<<<<<<<<<<<<<
-
-# Label para o campo de ID do Jogo
-label_entry_id_game = ttk.Label(frame_insert,
-                             text="ID Jogo",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o ID do Jogo
-entry_id_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_id_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Nome do Jogo
-label_entry_name_game = ttk.Label(frame_insert,
-                             text="Nome",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o Nome do Jogo
-entry_name_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_name_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Gênero do Jogo
-label_entry_gender_game = ttk.Label(frame_insert,
-                             text="Gênero",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o Gênero do Jogo
-entry_gender_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_gender_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Preço do Jogo
-label_entry_price_game = ttk.Label(frame_insert,
-                             text="Preço",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o Preço do Jogo
-entry_price_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_price_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Produtora do Jogo
-label_entry_producer_game = ttk.Label(frame_insert,
-                             text="Produtora",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para a Produtora do Jogo
-entry_producer_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_producer_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Idade indicada do Jogo
-label_entry_age_game = ttk.Label(frame_insert,
-                             text="Idade",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para a Idade indicada do Jogo
-entry_age_game = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_age_game.configure(bg="#C6B4C9")
-
-# >>>>>>>>>>>>>> USUÁRIO <<<<<<<<<<<<<<
-
-# Label para o campo de ID do Usuário
-label_entry_id_player = ttk.Label(frame_insert,
-                             text="ID do Usuário",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o ID do Usuário
-entry_id_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_id_player.configure(bg="#C6B4C9")
-
-# Label para o campo de Nome do Usuário
-label_entry_name_player = ttk.Label(frame_insert,
-                             text="Nome",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para o Nome do Usuário
-entry_name_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_name_player.configure(bg="#C6B4C9")
-
-# Label para o campo de Idade do Usuário
-label_entry_age_player = ttk.Label(frame_insert,
-                             text="Idade",
-                             background=light_purple,
-                             font=("Calibri", 20))
-
-# Campo de entrada para a Idade do Usuário
-entry_age_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_age_player.configure(bg="#C6B4C9")
-
-# Label para o campo de País do Usuário
-label_entry_country_player = ttk.Label(frame_insert,
-                                    text="País",
-                                    background=light_purple,
-                                    font=("Calibri",20))
-
-# Campo de entrada para o País do Usuário
-entry_country_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_country_player.configure(bg="#C6B4C9")
-
-# Label para o campo de Status do Usuário
-label_entry_status_player = ttk.Label(frame_insert,
-                                    text="Status",
-                                    background=light_purple,
-                                    font=("Calibri",20))
-
-# Campo de entrada para o Status do Usuário
-entry_status_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_status_player.configure(bg="#C6B4C9")
-
-# Label para o campo de quantidade de Jogos Criados pelo Usuário
-label_entry_games_created_player = ttk.Label(frame_insert,
-                                    text="Jogos Criados",
-                                    background=light_purple,
-                                    font=("Calibri",20))
-
-# Campo de entrada para a quantidade de Jogos Criados pelo Usuário
-entry_games_created_player = tk.Entry(frame_insert,width=20, bg=purple, fg=light_purple, font=("Calibri",10))
-entry_games_created_player.configure(bg="#C6B4C9")
-
 # -----------------------> INÍCIA O LOOP PRINCIPAL DA INTERFACE <-----------------------
 
 if __name__ == "__main__":
-      app_buttons = AppButton(
+
+    app_buttons = AppButton(
         window,
         light_purple,
         medium_lilac,
