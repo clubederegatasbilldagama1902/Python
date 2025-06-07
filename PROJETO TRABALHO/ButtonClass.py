@@ -1,6 +1,5 @@
 import customtkinter
 
-
 class AppButton:
     def __init__(self, window,
                  light_purple, medium_lilac,
@@ -16,7 +15,7 @@ class AppButton:
         frame_select, frame_insert, frame_cart: Frames para diferentes seções
         select_image...delete_image: Imagens para os botões principais
         select_frame...game_frame: Funções de callback para os botões
-        
+
         """
 
         # Atribui todos os parâmetros recebidos aos atributos da instância
