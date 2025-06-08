@@ -5,7 +5,7 @@ class AppButton:
                  light_purple, medium_lilac,
                  frame_select, frame_insert, frame_cart,
                  select_image, insert_image, update_image, delete_image,
-                 select_frame, insert_frame, update_frame, delete_frame, game_frame):
+                 select_frame, insert_frame, update_frame, delete_frame):
         """
         Construtor da classe AppButton.
 
@@ -33,13 +33,18 @@ class AppButton:
         self.insert_frame = insert_frame
         self.update_frame = update_frame
         self.delete_frame = delete_frame
-        self.game_frame = game_frame
 
         # Chama os métodos para criar os grupos de botões
         self.create_main_buttons()  # Cria os botões principais na sidebar
         self.create_select_frame_buttons()  # Cria botões do frame de seleção
         self.create_cart_frame_buttons()  # Cria botões do frame do carrinho
         self.create_insert_frame_buttons()  # Cria botões do frame de inserção
+
+    def mostrar_jogo(self):
+        self.frame_insert.mostrar_campos_jogo()
+
+    def mostrar_usuario(self):
+        self.frame_insert.mostrar_campos_jogador()
 
     def create_main_buttons(self):
         """Cria os 4 botões principais localizados na sidebar esquerda"""
@@ -282,7 +287,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.game_frame
+            command=self.mostrar_jogo
         )
         self.button_insert_information_game.place(x=520, y=40)  # Lado direito superior
 
@@ -296,7 +301,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.game_frame
+            command=self.mostrar_usuario
         )
         self.button_insert_information_player.place(x=640, y=40)  # Ao lado do anterior
 
@@ -310,6 +315,6 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.game_frame
+            command=self.mostrar_jogo or self.mostrar_usuario
         )
         self.button_insert_from_game_and_player.place(x=580, y=500)  # Centro inferior
