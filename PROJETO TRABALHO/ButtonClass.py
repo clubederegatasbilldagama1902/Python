@@ -1,11 +1,16 @@
 import customtkinter
+from DataBase import *
 
 class AppButton:
     def __init__(self, window,
                  light_purple, medium_lilac,
                  frame_select, frame_insert, frame_cart,
                  select_image, insert_image, update_image, delete_image,
-                 select_frame, insert_frame, update_frame, delete_frame, game_frame, player_frame):
+                 select_frame, insert_frame, update_frame, delete_frame, game_frame, player_frame,
+                 entry_name_game, entry_price_game, entry_id_game,
+                 entry_age_game, entry_producer_game, entry_gender_game,
+                 entry_id_player, entry_name_player, entry_age_player, entry_country_player,
+                 entry_status_player, entry_games_created_player):
         """
         Construtor da classe AppButton.
 
@@ -35,6 +40,18 @@ class AppButton:
         self.delete_frame = delete_frame
         self.game_frame = game_frame
         self.player_frame = player_frame
+        self.entry_name_game = entry_name_game
+        self.entry_price_game = entry_price_game
+        self.entry_id_game = entry_id_game
+        self.entry_age_game = entry_age_game
+        self.entry_producer_game = entry_producer_game
+        self.entry_gender_game = entry_gender_game
+        self.entry_id_player = entry_id_player
+        self.entry_name_player = entry_name_player
+        self.entry_age_player = entry_age_player
+        self.entry_country_player = entry_country_player
+        self.entry_status_player = entry_status_player
+        self.entry_games_created_player = entry_games_created_player
 
         # Chama os métodos para criar os grupos de botões
         self.create_main_buttons()  # Cria os botões principais na sidebar
@@ -118,7 +135,7 @@ class AppButton:
         """Cria os botões do frame de seleção/consulta"""
 
         # Botão para buscar por ID do jogo
-        self.button_search_id_game_select = customtkinter.CTkButton(
+        self.botao_procurar_id_jogo = customtkinter.CTkButton(
             master=self.frame_select,  # Frame pai
             text="ID do Jogo",  # Texto do botão
             width=50,  # Largura menor (texto curto)
@@ -127,12 +144,12 @@ class AppButton:
             hover_color="#a676b0",  # Cor roxa clara ao passar mouse
             text_color="white",  # Texto branco
             font=("Segoe UI", 20, "bold"),  # Fonte padrão
-            command=self.select_frame  # Função de callback
+            command=lambda: Procurar_ID_Jogo()  # Função de callback
         )
-        self.button_search_id_game_select.place(x=20, y=160)  # Posicionamento
+        self.botao_procurar_id_jogo.place(x=20, y=160)  # Posicionamento
 
         # Botão para buscar por Nome do jogo (mesma estrutura dos demais)
-        self.button_search_name_game_select = customtkinter.CTkButton(
+        self.botao_procurar_nome_jogo = customtkinter.CTkButton(
             master=self.frame_select,
             text="Nome",
             width=100,  # Largura maior para texto maior
@@ -141,12 +158,12 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.select_frame
+            command=lambda: Procurar_Nome()
         )
-        self.button_search_name_game_select.place(x=150, y=160)  # Ao lado do anterior
+        self.botao_procurar_nome_jogo.place(x=150, y=160)  # Ao lado do anterior
 
         # Os demais botões seguem o mesmo padrão com diferentes posições
-        self.button_search_gender_game_select = customtkinter.CTkButton(
+        self.botao_procurar_genero_jogo = customtkinter.CTkButton(
             master=self.frame_select,
             text="Gênero",
             width=100,
@@ -155,9 +172,9 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.select_frame
+            command=lambda: Procurar_Genero()
         )
-        self.button_search_gender_game_select.place(x=280, y=160)
+        self.botao_procurar_genero_jogo.place(x=280, y=160)
 
         self.button_search_price_game_select = customtkinter.CTkButton(
             master=self.frame_select,
@@ -168,7 +185,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.select_frame
+            command=lambda: Procurar_Preco()
         )
         self.button_search_price_game_select.place(x=410, y=160)
 
@@ -181,7 +198,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.select_frame
+            command=lambda: Procurar_developer()
         )
         self.button_search_producer_game_select.place(x=540, y=160)
 
@@ -194,7 +211,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.select_frame
+            command=lambda: Procurar_Idade()
         )
         self.button_search_age_game_select.place(x=670, y=160)
 
@@ -287,6 +304,28 @@ class AppButton:
         )
         self.button_insert_information_game.place(x=520, y=40)  # Lado direito superior
 
+        # Botão para inserir JOGO
+        self.button_insert_game = customtkinter.CTkButton(
+            master=self.frame_insert,
+            text="Inserir Jogo",
+            width=100,
+            height=85,
+            fg_color="#3d2e4c",
+            hover_color="#a676b0",
+            text_color="white",
+            font=("Segoe UI", 20, "bold"),
+            command=lambda: Insert_table_jogos(
+                self.entry_name_game.get(),
+                self.entry_price_game.get(),
+                self.entry_id_game.get(),
+                self.entry_age_game.get(),
+                self.entry_producer_game.get(),
+                self.entry_gender_game.get()
+            )
+        )
+        # Inicialmente oculto
+        self.button_insert_game.place_forget()
+
         # Botão para inserir informações de usuários
         self.button_insert_information_player = customtkinter.CTkButton(
             master=self.frame_insert,
@@ -302,15 +341,22 @@ class AppButton:
         self.button_insert_information_player.place(x=640, y=40)  # Ao lado do anterior
 
         # Botão principal de inserção
-        self.button_insert_from_game_and_player = customtkinter.CTkButton(
+        self.button_insert_user = customtkinter.CTkButton(
             master=self.frame_insert,
-            text="Inserir",
-            width=100,
+            text="Inserir Usuário",
+            width=120,
             height=85,
             fg_color="#3d2e4c",
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=self.insert_frame
+            command=lambda: Insert_table_user(
+                self.entry_id_player.get(),
+                self.entry_name_player.get(),
+                self.entry_age_player.get(),
+                self.entry_country_player.get(),
+                self.entry_status_player.get(),
+                bool(int(self.entry_games_created_player.get()) > 0)
+            )
         )
-        self.button_insert_from_game_and_player.place(x=580, y=500)  # Centro inferior
+        self.button_insert_user.place_forget()
