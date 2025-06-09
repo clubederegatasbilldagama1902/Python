@@ -4,6 +4,7 @@ from PIL import Image  # Para manipulação de imagens
 from PIL import ImageTk  # Para integração de imagens com Tkinter
 from FrameClass import *  # Importa classes personalizadas de frames
 from ButtonClass import AppButton  # Classe personalizada para botões
+from DataBase import *
 import warnings  # Para gerenciar avisos
 
 warnings.filterwarnings("ignore", category=UserWarning)  # Ignora avisos específicos
@@ -199,6 +200,7 @@ def game_frame():
         label_entry_price_game.place_forget()
         label_entry_producer_game.place_forget()
         label_entry_age_game.place_forget()
+        app_buttons.button_insert_game.place_forget()
 
         entry_id_game.place_forget()
         entry_name_game.place_forget()
@@ -215,6 +217,7 @@ def game_frame():
         label_entry_price_game.place(x=510,y=165)
         label_entry_producer_game.place(x=670, y=165)
         label_entry_age_game.place(x=830, y=165)
+        app_buttons.button_insert_game.place(x=580, y=500)
 
         entry_id_game.place(x=30, y=200)
         entry_name_game.place(x=190,y=200)
@@ -222,6 +225,21 @@ def game_frame():
         entry_price_game.place(x=510,y=200)
         entry_producer_game.place(x=670, y=200)
         entry_age_game.place(x=830, y=200)
+
+        label_entry_id_player.place_forget()
+        label_entry_name_player.place_forget()
+        label_entry_age_player.place_forget()
+        label_entry_country_player.place_forget()
+        label_entry_status_player.place_forget()
+        label_entry_games_created_player.place_forget()
+
+        entry_id_player.place_forget()
+        entry_name_player.place_forget()
+        entry_age_player.place_forget()
+        entry_country_player.place_forget()
+        entry_status_player.place_forget()
+        entry_games_created_player.place_forget()
+        app_buttons.button_insert_user.place_forget()
 
         frame_game_visible = True
         frame_player_visible = False
@@ -251,6 +269,8 @@ def player_frame():
         entry_status_player.place_forget()
         entry_games_created_player.place_forget()
 
+        app_buttons.button_insert_user.place_forget()
+
         frame_player_visible = False
     else:
         label_entry_id_player.place(x=30, y=165)
@@ -266,6 +286,24 @@ def player_frame():
         entry_country_player.place(x=510,y=200)
         entry_status_player.place(x=670, y=200)
         entry_games_created_player.place(x=830, y=200)
+
+        app_buttons.button_insert_user.place(x=580, y=500)
+
+        label_entry_id_game.place_forget()
+        label_entry_name_game.place_forget()
+        label_entry_gender_game.place_forget()
+        label_entry_price_game.place_forget()
+        label_entry_producer_game.place_forget()
+        label_entry_age_game.place_forget()
+
+        app_buttons.button_insert_game.place_forget()
+
+        entry_id_game.place_forget()
+        entry_name_game.place_forget()
+        entry_gender_game.place_forget()
+        entry_price_game.place_forget()
+        entry_producer_game.place_forget()
+        entry_age_game.place_forget()
 
         frame_player_visible = True
         frame_game_visible = False
@@ -379,11 +417,15 @@ label_entry_age_game = ttk.Label(frame_insert,
 entry_age_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
 entry_age_game.configure(bg="#C6B4C9")
 
-
-
-
-
-
+def inserir_jogo():
+    Insert_table_jogos(
+        name=entry_name_game.get(),
+        price=entry_price_game.get(),
+        id_jogo=entry_id_game.get(),  # ou outro campo se você tiver
+        idade=entry_age_game.get(),
+        developer=entry_producer_game.get(),
+        genre=entry_gender_game.get()
+    )
 
 # Label para o campo de ID do Usuário (Jogador)
 label_entry_id_player = ttk.Label(frame_insert,
@@ -445,27 +487,49 @@ label_entry_games_created_player = ttk.Label(frame_insert,
 entry_games_created_player = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
 entry_games_created_player.configure(bg="#C6B4C9")
 
+def inserir_usuario():
+    Insert_table_user(
+        id=entry_id_player.get(),
+        nome=entry_name_player.get(),
+        idade=entry_age_player.get(),
+        pais=entry_country_player.get(),
+        status=entry_status_player.get(),
+        developer=entry_games_created_player.get()
+    )
+
 # -----------------------> INÍCIA O LOOP PRINCIPAL DA INTERFACE <-----------------------
 
 if __name__ == "__main__":
     # Cria uma instância da classe AppButton que gerencia todos os botões
     app_buttons = AppButton(
-        window,  # Janela principal
-        light_purple,  # Cor principal dos botões
-        medium_lilac,  # Cor secundária
-        frame_select,  # Frame de consulta
-        frame_insert,  # Frame de inserção
-        frame_cart,  # Frame do carrinho
-        select_image,  # Ícone para consulta
-        insert_image,  # Ícone para inserção
-        update_image,  # Ícone para atualização
-        delete_image,  # Ícone para exclusão
-        select_frame,  # Função para mostrar frame de consulta
-        insert_frame,  # Função para mostrar frame de inserção
-        update_frame,  # Função para mostrar frame de atualização
-        delete_frame,  # Função para mostrar frame de exclusão
+        window,
+        light_purple,
+        medium_lilac,
+        frame_select,
+        frame_insert,
+        frame_cart,
+        select_image,
+        insert_image,
+        update_image,
+        delete_image,
+        select_frame,
+        insert_frame,
+        update_frame,
+        delete_frame,
         game_frame,
-        player_frame
+        player_frame,
+        entry_name_game,
+        entry_price_game,
+        entry_id_game,
+        entry_age_game,
+        entry_producer_game,
+        entry_gender_game,
+        entry_id_player,
+        entry_name_player,
+        entry_age_player,
+        entry_country_player,
+        entry_status_player,
+        entry_games_created_player
     )
 
     # Criação dos botões na interface
