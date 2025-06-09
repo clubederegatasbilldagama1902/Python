@@ -1,445 +1,340 @@
 import mysql.connector
-from tkinter import messagebox
-import customtkinter
 
 
-class Database:
-    def __init__(self):
-        self.conex_db = self.conection_db()
-        if self.conex_db:
-            self.cursor_db = self.conex_db.cursor()
-            self.create_tables()
+def create_db():
+    create = '''CREATE DATABASE IF NOT EXISTS db_Wixus'''
+    cursor_db.execute(create)
+    use = '''USE db_Wixus'''
+    cursor_db.execute(use)
+    print("Data base criada")
 
-    def conection_db(self):
-        """Estabelece conexão com o banco de dados"""
-        try:
-            conex = mysql.connector.connect(
-                user='root',
-                host='localhost',
-                password='ceub123456',
-                database='db_Wixus'
-            )
-            print("Conexão concluída")
-            return conex
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro de conexão", f"Erro ao conectar ao MySQL: {err}")
-            return None
 
-    def create_tables(self):
-        """Cria todas as tabelas necessárias"""
-        self.create_db()
-        self.create_tb_jogos()
-        self.create_tb_user()
-        self.create_tb_cart()
-        self.create_tb_carrinho_itens()
+def conection_db():
+    conection = mysql.connector.connect(
+        user='root',
+        host='localhost',
+        database='db_Wixus',
+        password='ceub123456'
+    )
 
-    def create_db(self):
-        """Cria o banco de dados se não existir"""
-        try:
-            self.cursor_db.execute('''CREATE DATABASE IF NOT EXISTS db_Wixus''')
-            self.cursor_db.execute('''USE db_Wixus''')
-            print("Database criada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar database: {err}")
+    print("Conexão concluida")
+    print("Conexão", conection)
+    return conection
 
-    # ------------------------------------------- JOGOS --------------------------------------------------------
-    def create_tb_jogos(self):
-        """Cria tabela de jogos"""
-        try:
-            create = '''CREATE TABLE IF NOT EXISTS tb_jogos(
-                    id_jogo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(50) NOT NULL,
-                    price DECIMAL(9,2),
-                    faixa_etaria INT,
-                    developer VARCHAR(30) NOT NULL,
-                    data_lanc DATE,
-                    plataformas VARCHAR(30),
-                    genre VARCHAR(50)
-                    )'''
-            self.cursor_db.execute(create)
-            print("Tabela Jogos criada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar tabela de jogos: {err}")
 
-    def insert_jogo(self, dados_jogo):
-        """Insere um novo jogo na tabela"""
-        try:
-            sql = '''INSERT INTO tb_jogos (name, price, faixa_etaria, developer, data_lanc, plataformas, genre)
-                     VALUES (%s, %s, %s, %s, %s, %s, %s)'''
-            self.cursor_db.execute(sql, dados_jogo)
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Jogo inserido com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao inserir jogo: {err}")
-            return False
+# -------------------------------------------JOGOS--------------------------------------------------------
 
-    def buscar_jogo_por_id(self, id_jogo):
-        """Busca jogo por ID"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE id_jogo = %s'''
-            self.cursor_db.execute(sql, (id_jogo,))
-            return self.cursor_db.fetchone()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogo: {err}")
-            return None
+def create_tb_jogos(cursor_db):
+    """Cria tabela de jogos"""
+    create = '''CREATE TABLE IF NOT EXISTS tb_jogos(
+            id_jogo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(50) NOT NULL,
+            price DECIMAL(9,2),
+            faixa_etaria INT,
+            developer VARCHAR(30) NOT NULL,
+            data_lanc DATE,
+            plataformas VARCHAR(30),
+            genre VARCHAR(50)
+            )'''
+    cursor_db.execute(create)
+    print("Tabela Jogos criada")
 
-    def buscar_jogos_por_nome(self, nome):
-        """Busca jogos por nome (LIKE)"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE name LIKE %s'''
-            self.cursor_db.execute(sql, (f"%{nome}%",))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogos: {err}")
-            return []
 
-    def buscar_jogos_por_genero(self, genero):
-        """Busca jogos por gênero"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE genre LIKE %s'''
-            self.cursor_db.execute(sql, (f"%{genero}%",))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogos por gênero: {err}")
-            return []
+# Em DataBase.py
+def Insert_table_jogos(name, price, id_jogo, idade, developer, genre):
+    sql = '''
+    INSERT INTO tb_jogos (name, price, id_jogo, faixa_etaria, developer, plataformas, genre)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    '''
+    dados_geral = (name, price, id_jogo, idade, developer, "PC", genre)
+    cursor_db.execute(sql, dados_geral)
+    conex_db.commit()
+    print('Dados do jogo inseridos')
 
-    def buscar_jogos_por_preco(self, preco_max):
-        """Busca jogos com preço menor ou igual ao especificado"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE price <= %s'''
-            self.cursor_db.execute(sql, (preco_max,))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogos por preço: {err}")
-            return []
 
-    def buscar_jogos_por_produtor(self, produtor):
-        """Busca jogos por produtor"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE developer LIKE %s'''
-            self.cursor_db.execute(sql, (f"%{produtor}%",))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogos por produtor: {err}")
-            return []
+def Procurar_ID_Jogo():
+    """Busca jogo por ID"""
+    sql = f''' SELECT * FROM tb_jogos WHERE id_jogo '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(f'Id: {row[0]} | Nome: {row[1]} | Preço: {row[2]} | Faixa Etaria: {row[3]} | Desenvolvedor: {row[4]} | Data de Lançamento: {row[5]} | plataformas: {row[6]} | Genero: {row[7]} |')
 
-    def buscar_jogos_por_idade(self, idade_max):
-        """Busca jogos com faixa etária menor ou igual à especificada"""
-        try:
-            sql = '''SELECT * FROM tb_jogos WHERE faixa_etaria <= %s'''
-            self.cursor_db.execute(sql, (idade_max,))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar jogos por idade: {err}")
-            return []
 
-    def atualizar_jogo(self, id_jogo, campo, novo_valor):
-        """Atualiza um campo específico de um jogo"""
-        try:
-            sql = f'''UPDATE tb_jogos SET {campo} = %s WHERE id_jogo = %s'''
-            self.cursor_db.execute(sql, (novo_valor, id_jogo))
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Jogo atualizado com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao atualizar jogo: {err}")
-            return False
+def Procurar_Nome():
+    sql = f''' SELECT * FROM tb_jogos WHERE name '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-    def deletar_jogo(self, id_jogo):
-        """Remove um jogo do banco de dados"""
-        try:
-            sql = '''DELETE FROM tb_jogos WHERE id_jogo = %s'''
-            self.cursor_db.execute(sql, (id_jogo,))
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Jogo removido com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao remover jogo: {err}")
-            return False
 
-    # ------------------------------------------- USUÁRIOS --------------------------------------------------------
-    def create_tb_user(self):
-        """Cria tabela de usuários"""
-        try:
-            create = '''CREATE TABLE IF NOT EXISTS tb_user(
-                    id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    nome VARCHAR(50) NOT NULL,
-                    idade INT NOT NULL,
-                    pais VARCHAR(50),
-                    status VARCHAR(50),
-                    developer BOOL DEFAULT FALSE
-                    )'''
-            self.cursor_db.execute(create)
-            print("Tabela User criada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar tabela de usuários: {err}")
+def Procurar_Genero():
+    sql = f''' SELECT * FROM tb_jogos WHERE genre '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-    def insert_usuario(self, dados_usuario):
-        """Insere um novo usuário na tabela"""
-        try:
-            sql = '''INSERT INTO tb_user (nome, idade, pais, status, developer)
-                     VALUES (%s, %s, %s, %s, %s)'''
-            self.cursor_db.execute(sql, dados_usuario)
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Usuário inserido com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao inserir usuário: {err}")
-            return False
 
-    def buscar_usuario_por_id(self, id_user):
-        """Busca usuário por ID"""
-        try:
-            sql = '''SELECT * FROM tb_user WHERE id_user = %s'''
-            self.cursor_db.execute(sql, (id_user,))
-            return self.cursor_db.fetchone()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar usuário: {err}")
-            return None
+def Procurar_Preco():
+    sql = f''' SELECT * FROM tb_jogos WHERE price '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-    def buscar_usuarios_por_nome(self, nome):
-        """Busca usuários por nome"""
-        try:
-            sql = '''SELECT * FROM tb_user WHERE nome LIKE %s'''
-            self.cursor_db.execute(sql, (f"%{nome}%",))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao buscar usuários: {err}")
-            return []
 
-    def atualizar_usuario(self, id_user, campo, novo_valor):
-        """Atualiza um campo específico de um usuário"""
-        try:
-            sql = f'''UPDATE tb_user SET {campo} = %s WHERE id_user = %s'''
-            self.cursor_db.execute(sql, (novo_valor, id_user))
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Usuário atualizado com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao atualizar usuário: {err}")
-            return False
+def Procurar_developer():
+    sql = f''' SELECT * FROM tb_jogos WHERE developer '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-    def deletar_usuario(self, id_user):
-        """Remove um usuário do banco de dados"""
-        try:
-            sql = '''DELETE FROM tb_user WHERE id_user = %s'''
-            self.cursor_db.execute(sql, (id_user,))
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Usuário removido com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao remover usuário: {err}")
-            return False
+def Procurar_Idade():
+    Escolha = input("Digite a faixa etária do jogo: ")
+    sql = f''' SELECT * FROM tb_jogos WHERE faixa_etaria <= "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-    # ------------------------------------------- CARRINHO --------------------------------------------------------
-    def create_tb_cart(self):
-        """Cria tabela de carrinhos"""
-        try:
-            create = '''CREATE TABLE IF NOT EXISTS tb_cart(
-                    id_cart INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    id_user INT NOT NULL,
-                    preco_total DECIMAL(9,2) DEFAULT 0,
-                    forma_pagamento VARCHAR(30),
-                    FOREIGN KEY (id_user) REFERENCES tb_user(id_user)
-                    )'''
-            self.cursor_db.execute(create)
-            print("Tabela Cart criada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar tabela de carrinho: {err}")
 
-    def create_tb_carrinho_itens(self):
-        """Cria tabela de itens do carrinho"""
-        try:
-            create = '''CREATE TABLE IF NOT EXISTS tb_carrinho_itens(
-                    id_item INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    id_cart INT NOT NULL,
-                    id_jogo INT NOT NULL,
-                    quantidade INT NOT NULL,
-                    preco_unitario DECIMAL(9,2) NOT NULL,
-                    FOREIGN KEY (id_cart) REFERENCES tb_cart(id_cart),
-                    FOREIGN KEY (id_jogo) REFERENCES tb_jogos(id_jogo)
-                    )'''
-            self.cursor_db.execute(create)
-            print("Tabela Itens do Carrinho criada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar tabela de itens do carrinho: {err}")
 
-    def criar_carrinho(self, id_user):
-        """Cria um novo carrinho para um usuário"""
-        try:
-            sql = '''INSERT INTO tb_cart (id_user) VALUES (%s)'''
-            self.cursor_db.execute(sql, (id_user,))
-            self.conex_db.commit()
-            return self.cursor_db.lastrowid
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao criar carrinho: {err}")
-            return None
 
-    def adicionar_ao_carrinho(self, id_cart, id_jogo, quantidade):
-        """Adiciona um item ao carrinho"""
-        try:
-            # Primeiro obtém o preço do jogo
-            sql_preco = '''SELECT price FROM tb_jogos WHERE id_jogo = %s'''
-            self.cursor_db.execute(sql_preco, (id_jogo,))
-            preco = self.cursor_db.fetchone()[0]
 
-            # Verifica se o item já está no carrinho
-            sql_check = '''SELECT id_item, quantidade FROM tb_carrinho_itens 
-                           WHERE id_cart = %s AND id_jogo = %s'''
-            self.cursor_db.execute(sql_check, (id_cart, id_jogo))
-            item = self.cursor_db.fetchone()
+def Procurar_data_lanc():
+    Escolha = input("Digite a data de lançamento do jogo: ")
+    sql = f''' SELECT * FROM tb_jogos WHERE data_lanc  = "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-            if item:
-                # Atualiza a quantidade se o item já existir
-                nova_quantidade = item[1] + quantidade
-                sql_update = '''UPDATE tb_carrinho_itens SET quantidade = %s 
-                               WHERE id_item = %s'''
-                self.cursor_db.execute(sql_update, (nova_quantidade, item[0]))
-            else:
-                # Adiciona novo item ao carrinho
-                sql_insert = '''INSERT INTO tb_carrinho_itens 
-                                (id_cart, id_jogo, quantidade, preco_unitario) 
-                                VALUES (%s, %s, %s, %s)'''
-                self.cursor_db.execute(sql_insert, (id_cart, id_jogo, quantidade, preco))
 
-            # Atualiza o preço total do carrinho
-            self.atualizar_total_carrinho(id_cart)
+def Procurar_plataformas():
+    Escolha = input("Digite o gênero do jogo: ")
+    sql = f''' SELECT * FROM tb_jogos WHERE plataformas  = "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
 
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Item adicionado ao carrinho!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao adicionar ao carrinho: {err}")
-            return False
 
-    def remover_do_carrinho(self, id_cart, id_jogo, quantidade):
-        """Remove um item do carrinho"""
-        try:
-            # Verifica se o item está no carrinho
-            sql_check = '''SELECT id_item, quantidade FROM tb_carrinho_itens 
-                          WHERE id_cart = %s AND id_jogo = %s'''
-            self.cursor_db.execute(sql_check, (id_cart, id_jogo))
-            item = self.cursor_db.fetchone()
 
-            if item:
-                if item[1] > quantidade:
-                    # Reduz a quantidade se ainda houver itens
-                    nova_quantidade = item[1] - quantidade
-                    sql_update = '''UPDATE tb_carrinho_itens SET quantidade = %s 
-                                   WHERE id_item = %s'''
-                    self.cursor_db.execute(sql_update, (nova_quantidade, item[0]))
-                else:
-                    # Remove o item completamente se a quantidade for igual ou maior
-                    sql_delete = '''DELETE FROM tb_carrinho_itens WHERE id_item = %s'''
-                    self.cursor_db.execute(sql_delete, (item[0],))
 
-                # Atualiza o preço total do carrinho
-                self.atualizar_total_carrinho(id_cart)
 
-                self.conex_db.commit()
-                messagebox.showinfo("Sucesso", "Item removido do carrinho!")
-                return True
-            else:
-                messagebox.showwarning("Aviso", "Item não encontrado no carrinho!")
-                return False
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao remover do carrinho: {err}")
-            return False
+def Update_tb_jogos(cursor_db, conex_db):
+    escolha = input("Digite o ID do jogo que deseja atualizar: ")
+    escolha_coluna = input(
+        "Digite a coluna que deseja atualizar (name, price, faixa_etaria, developer, data_lanc, plataformas, genre): ")
+    novo_valor = input(f"Digite o novo valor para {escolha_coluna}: ")
+    sql = f'''UPDATE tb_jogos SET {escolha_coluna} = %s WHERE id_jogo = %s'''
+    dados = (novo_valor, escolha)
+    cursor_db.execute(sql, dados)
+    conex_db.commit()
+    print(f'Dados do jogo com ID {escolha} atualizados')
 
-    def atualizar_total_carrinho(self, id_cart):
-        """Atualiza o preço total do carrinho"""
-        try:
-            sql = '''UPDATE tb_cart c
-                     SET preco_total = (
-                         SELECT COALESCE(SUM(ci.quantidade * ci.preco_unitario), 0)
-                         FROM tb_carrinho_itens ci
-                         WHERE ci.id_cart = c.id_cart
-                     )
-                     WHERE c.id_cart = %s'''
-            self.cursor_db.execute(sql, (id_cart,))
-            self.conex_db.commit()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao atualizar total do carrinho: {err}")
 
-    def ver_carrinho(self, id_cart):
-        """Retorna todos os itens de um carrinho"""
-        try:
-            sql = '''SELECT j.id_jogo, j.name, ci.quantidade, ci.preco_unitario, 
-                            (ci.quantidade * ci.preco_unitario) as total_item
-                     FROM tb_carrinho_itens ci
-                     JOIN tb_jogos j ON ci.id_jogo = j.id_jogo
-                     WHERE ci.id_cart = %s'''
-            self.cursor_db.execute(sql, (id_cart,))
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao ver carrinho: {err}")
-            return []
+def delete_tb_jogos(cursor_db, conex_db):
+    escolha = input("Digite o ID do jogo que deseja deletar: ")
+    sql = f'''DELETE FROM tb_jogos WHERE id_jogo = "{escolha}" '''
+    cursor_db.execute(sql)
+    conex_db.commit()
+    print(f'Dados do jogo com ID {escolha} deletados')
 
-    def finalizar_compra(self, id_cart, forma_pagamento):
-        """Finaliza a compra e limpa o carrinho"""
-        try:
-            # Atualiza a forma de pagamento
-            sql_update = '''UPDATE tb_cart 
-                           SET forma_pagamento = %s 
-                           WHERE id_cart = %s'''
-            self.cursor_db.execute(sql_update, (forma_pagamento, id_cart))
 
-            # Limpa o carrinho
-            sql_clear = '''DELETE FROM tb_carrinho_itens WHERE id_cart = %s'''
-            self.cursor_db.execute(sql_clear, (id_cart,))
+# ---------------------------------------------USUARIO--------------------------------------------------------
 
-            self.conex_db.commit()
-            messagebox.showinfo("Sucesso", "Compra finalizada com sucesso!")
-            return True
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao finalizar compra: {err}")
-            return False
+def create_tb_user(cursor_db):
+    # não coloquei a parametro 'jogos_criados' deve ser colocado na tabela tb_devs (Ricardo)
+    create = '''CREATE TABLE IF NOT EXISTS tb_user(
+            id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(50) NOT NULL,
+            idade INT NOT NULL,
+            pais VARCHAR(50),
+            status VARCHAR(50),
+            developer bool DEFAULT FALSE
+            )'''
+    cursor_db.execute(create)
+    print("Tabela User criada")
 
-    # ------------------------------------------- GERAL --------------------------------------------------------
-    def listar_todos_jogos(self):
-        """Retorna todos os jogos cadastrados"""
-        try:
-            sql = '''SELECT * FROM tb_jogos'''
-            self.cursor_db.execute(sql)
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao listar jogos: {err}")
-            return []
 
-    def listar_todos_usuarios(self):
-        """Retorna todos os usuários cadastrados"""
-        try:
-            sql = '''SELECT * FROM tb_user'''
-            self.cursor_db.execute(sql)
-            return self.cursor_db.fetchall()
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao listar usuários: {err}")
-            return []
+def Insert_table_user(id, nome, idade, pais, status, developer):
+    sql = '''
+    INSERT INTO tb_user (nome, idade, pais, status, developer)
+    VALUES (%s, %s, %s, %s, %s)
+    '''
+    dados = (id, nome, idade, pais, status, developer)
+    cursor_db.execute(sql, dados)
+    conex_db.commit()
+    print('Dados do usuario inseridos')
 
-    def fechar_conexao(self):
-        """Fecha a conexão com o banco de dados"""
-        try:
-            if hasattr(self, 'cursor_db') and self.cursor_db:
-                self.cursor_db.close()
-            if hasattr(self, 'conex_db') and self.conex_db and self.conex_db.is_connected():
-                self.conex_db.close()
-                print("Conexão encerrada")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Erro", f"Erro ao fechar conexão: {err}")
 
+def Procurar_Nome():
+    Escolha = input("Digite o nome do usuário: ")
+    sql = f''' SELECT * FROM tb_user WHERE nome = "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
+
+
+def Procurar_ID_Usuario():
+    Escolha = input("Digite o ID do usuário: ")
+    sql = f''' SELECT * FROM tb_user WHERE id_user = "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
+
+
+def Update_tb_user(cursor_db, conex_db):
+    escolha = input("Digite o ID do usuario que deseja atualizar: ")
+    escolha_coluna = input("Digite a coluna que deseja atualizar (nome, idade, pais, status, developer): ")
+    novo_valor = input(f"Digite o novo valor para {escolha_coluna}: ")
+    sql = f'''UPDATE tb_user SET {escolha_coluna} = %s WHERE id_user = %s'''
+    dados = (novo_valor, escolha)
+    cursor_db.execute(sql, dados)
+    conex_db.commit()
+    print(f'Dados do usuario com ID {escolha} atualizados')
+
+
+def delete_tb_user(cursor_db, conex_db):
+    escolha = input("Digite o ID do usuario que deseja deletar: ")
+    sql = f'''DELETE FROM tb_user WHERE id_user = "{escolha}" '''
+    cursor_db.execute(sql)
+    conex_db.commit()
+    print(f'Dados do usuario com ID {escolha} deletados')
+
+
+# --------------------------------------------CARRINHO--------------------------------------------------------
+
+def create_tb_cart(cursor_db):
+    create = '''CREATE TABLE IF NOT EXISTS tb_cart(
+            id_cart INT NOT NULL AUTO_INCREMENT,
+            preco_total INT NOT NULL,
+            forma_pagamento VARCHAR(30),
+            PRIMARY KEY (id_cart),
+            FOREIGN KEY (id_cart) REFERENCES tb_user(id_user)
+            )'''
+    cursor_db.execute(create)
+    print("Tabela Cart criada")
+
+
+def Insert_table_cart(cursor_db, conex_db):
+    sql = '''
+    INSERT INTO tb_cart (preco_total, forma_pagamento)
+    VALUES (%s, %s)
+    '''
+    dados = input('Digite o preço total do carrinho: '), \
+        input('Digite a forma de pagamento: ')
+    dados = tuple(dados)
+    cursor_db.execute(sql, dados)
+    conex_db.commit()
+    print('Dados do cartão inseridos')
+
+
+def Procurar_Produtos():
+    Escolha = input("Digite o ID do usuário: ")
+    sql = f''' SELECT * FROM tb_carrinho_compras WHERE id_cart = "{Escolha}" '''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
+
+
+def Update_tb_cart(cursor_db, conex_db):
+    escolha = input("Digite o ID do carrinho que deseja atualizar: ")
+    escolha_coluna = input("Digite a coluna que deseja atualizar (preco_total, forma_pagamento): ")
+    novo_valor = input(f"Digite o novo valor para {escolha_coluna}: ")
+    sql = f'''UPDATE tb_cart SET {escolha_coluna} = %s WHERE id_cart = %s'''
+    dados = (novo_valor, escolha)
+    cursor_db.execute(sql, dados)
+    conex_db.commit()
+    print(f'Dados do carrinho com ID {escolha} atualizados')
+
+
+def delete_tb_cart(cursor_db, conex_db):
+    escolha = input("Digite o ID do jogo que deseja deletar: ")
+    sql = f'''DELETE FROM tb_cart WHERE id_cart = "{escolha}" '''
+    cursor_db.execute(sql)
+    conex_db.commit()
+    print(f'Dados do carrinho com ID {escolha} deletados')
+
+
+# ---------------------------------------------GERAL---------------------------------------------------------
+
+def Ver_tudo():
+    print("Todas os jogos do banco de dados:")
+    sql = f'''SELECT * FROM tb_jogos'''
+    cursor_db.execute(sql)
+    rows = cursor_db.fetchall()
+    for row in rows:
+        print(row)
+
+
+# -----------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # Testes básicos
-    db = Database()
-    try:
-        # Teste de inserção de jogo
-        dados_jogo = ("The Witcher 3", 99.90, 18, "CD Projekt Red", "2015-05-19", "PC,PS4,XBOX", "RPG")
-        db.insert_jogo(dados_jogo)
+    conex_db = conection_db()
+    cursor_db = conex_db.cursor()
 
-        # Teste de busca
-        resultado = db.buscar_jogo_por_id(1)
-        print(resultado)
+    # Criando as tabelas (Ricardo)
+    create_db()
+    create_tb_jogos(cursor_db)
+    create_tb_user(cursor_db)
+    create_tb_cart(cursor_db)
 
-    finally:
-        db.fechar_conexao()
+    # Insertando dados nas tabelas (Rafael)
+    Insert_table_jogos(cursor_db, conex_db)
+    Insert_table_user(cursor_db, conex_db)
+    Insert_table_cart(cursor_db, conex_db)
+
+    # Atualizando os dados nas tabelas (Rafael)
+    Update_tb_jogos(cursor_db, conex_db)
+    Update_tb_user(cursor_db, conex_db)
+    Update_tb_cart(cursor_db, conex_db)
+
+    # Removendo os dados das tabelas (Rafael)
+    delete_tb_jogos(cursor_db, conex_db)
+    delete_tb_cart(cursor_db, conex_db)
+    delete_tb_user(cursor_db, conex_db)
+
+    # Procurando por informações nos jogos (Mateus)
+    Procurar_ID_Jogo()
+    Procurar_Nome()
+    Procurar_Preco()
+    Procurar_Idade()
+    Procurar_developer()
+    Procurar_data_lanc()
+    Procurar_plataformas()
+    Procurar_Genero()
+
+    # Procurar informações dos usuários (Mateus)
+    Procurar_ID_Usuario()
+    Procurar_Nome()
+    # Procurar informações no carrinho (Mateus)
+    Procurar_Produtos()
+
+    # Ver tudo (Mateus)
+    Ver_tudo()
+
+    # Instruções para trouxas (Rafael)
+
+    # Para criar o banco de dados no seu pc, baixe o mysql-connector-python e o mysql-server NA MESMA VERSÂO DO SEU PYTHON
+    # Instale o mysql-connector-python com o comando: pip install mysql-connector-python
+    # Instale o mysql-server com o comando: sudo apt install mysql-server
+    # Para coferir a versao use o comando: get-command python
+    # Então crie uma database no mysql com o nome db_Wixus (ou oq achar melhor) e a senha q tu quiser mas caso as mesmas sejam diferentes, mude no código
+
+    # A primeira vez que você for rodar o código, descomente as linhas de create e COMENTE a database no início do código
+    # Depois disso comente os create e descomente a database no início do código
+    # A inserção da data de lançamento está no formato YYYY-MM-DD, year, month e day
+    # Deixei todas as funções prontas para serem usadas entao caso queira testar alguma coisa, basta comente as paradas que tu não vai usar
+    # O update das tabelas foi feito com escolhas de colunas, se isso dificultar no tkinter, tu q se lasque (me fala q eu faço o de cada um)
+    # Todos os comandos funcionais entam após o main então tudo que quiser usar vai estar lá, se nn tiver, é pq eu não tem
+
+    # Ja avisando que se tiver faltando algum select ou table é td culpa do Ricardo (do Mateus tbm mas isso é de menos), que não fez as paradas direito
+    # Se tiver faltando algum insert, update ou delete é culpa do Rafael que tambem não faz as paradas direito
