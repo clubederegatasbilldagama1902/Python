@@ -10,7 +10,8 @@ class AppButton:
                  entry_name_game, entry_price_game, entry_id_game,
                  entry_age_game, entry_producer_game, entry_gender_game,
                  entry_id_player, entry_name_player, entry_age_player, entry_country_player,
-                 entry_status_player, entry_games_created_player):
+                 entry_status_player, entry_games_created_player,
+                 cursor_db, conex_db):
         """
         Construtor da classe AppButton.
 
@@ -52,6 +53,8 @@ class AppButton:
         self.entry_country_player = entry_country_player
         self.entry_status_player = entry_status_player
         self.entry_games_created_player = entry_games_created_player
+        self.cursor_db = cursor_db
+        self.conex_db = conex_db
 
         # Chama os métodos para criar os grupos de botões
         self.create_main_buttons()  # Cria os botões principais na sidebar
@@ -158,7 +161,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=lambda: Procurar_Nome()
+            command=lambda: procurar_nome_jogo()
         )
         self.botao_procurar_nome_jogo.place(x=150, y=160)  # Ao lado do anterior
 
@@ -315,6 +318,8 @@ class AppButton:
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=lambda: Insert_table_jogos(
+                self.cursor_db,
+                self.conex_db,
                 self.entry_name_game.get(),
                 self.entry_price_game.get(),
                 self.entry_id_game.get(),
@@ -350,7 +355,7 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=lambda: Insert_table_user(
+            command=lambda: insert_table_user(
                 self.entry_id_player.get(),
                 self.entry_name_player.get(),
                 self.entry_age_player.get(),
