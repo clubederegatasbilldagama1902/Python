@@ -1,4 +1,3 @@
-
 # -----------------------> IMPORTAÇÕES DE BIBLIOTECAS <-----------------------
 
 from PIL import Image  # Para manipulação de imagens
