@@ -4,7 +4,7 @@
 from PIL import Image  # Para manipulação de imagens
 from PIL import ImageTk  # Para integração de imagens com Tkinter
 from FrameClass import *  # Importa classes personalizadas de frames
-from ButtonClass import AppButton  # Classe personalizada para botões
+from BotaoClasse import AppButton  # Classe personalizada para botões
 from DataBase import *
 import warnings  # Para gerenciar avisos
 
@@ -348,16 +348,6 @@ draw_rounded_line(canvas_line, 0, 0, 489, 10, light_lilac)
 
 # -----------------------> CAMPOS DE ENTRADA NO FRAME DE JOGOS <-----------------------
 
-# Label para o campo de ID do Jogo
-label_entry_faixa_etaria = ttk.Label(frame_insert,
-                               text="ID Jogo",
-                               background=light_purple,
-                               font=("Calibri", 20))
-
-# Campo de entrada para o ID do Jogo
-entry_faixa_etaria = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
-entry_faixa_etaria.configure(bg="#C6B4C9")
-
 # Label para o campo de Nome do Jogo
 label_entry_name_game = ttk.Label(frame_insert,
                                  text="Nome",
@@ -367,16 +357,6 @@ label_entry_name_game = ttk.Label(frame_insert,
 # Campo de entrada para o Nome do Jogo
 entry_name_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
 entry_name_game.configure(bg="#C6B4C9")
-
-# Label para o campo de Gênero do Jogo
-label_entry_gender_game = ttk.Label(frame_insert,
-                                  text="Gênero",
-                                  background=light_purple,
-                                  font=("Calibri", 20))
-
-# Campo de entrada para o Gênero do Jogo
-entry_gender_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
-entry_gender_game.configure(bg="#C6B4C9")
 
 # Label para o campo de Preço do Jogo
 label_entry_price_game = ttk.Label(frame_insert,
@@ -388,6 +368,16 @@ label_entry_price_game = ttk.Label(frame_insert,
 entry_price_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
 entry_price_game.configure(bg="#C6B4C9")
 
+# Label para o campo de ID do Jogo
+label_entry_faixa_etaria = ttk.Label(frame_insert,
+                               text="ID Jogo",
+                               background=light_purple,
+                               font=("Calibri", 20))
+
+# Campo de entrada para o ID do Jogo
+entry_faixa_etaria = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
+entry_faixa_etaria.configure(bg="#C6B4C9")
+
 # Label para o campo de Produtora do Jogo
 label_entry_producer_game = ttk.Label(frame_insert,
                                     text="Produtora",
@@ -398,15 +388,23 @@ label_entry_producer_game = ttk.Label(frame_insert,
 entry_producer_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
 entry_producer_game.configure(bg="#C6B4C9")
 
-# Label para o campo de Idade indicada do Jogo
-label_entry_age_game = ttk.Label(frame_insert,
-                               text="Idade",
-                               background=light_purple,
-                               font=("Calibri", 20))
+label_entry_plataforma = ttk.Label(frame_insert,
+                                   text="Plataforma",
+                                   background=light_purple,
+                                   font=("Calibri", 20))
+entry_plataforma = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
+entry_plataforma.configure(bg="#C6B4C9")
 
-# Campo de entrada para a Idade indicada do Jogo
-entry_age_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
-entry_age_game.configure(bg="#C6B4C9")
+# Label para o campo de Gênero do Jogo
+label_entry_gender_game = ttk.Label(frame_insert,
+                                  text="Gênero",
+                                  background=light_purple,
+                                  font=("Calibri", 20))
+
+# Campo de entrada para o Gênero do Jogo
+entry_gender_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
+entry_gender_game.configure(bg="#C6B4C9")
+
 
 def inserir_jogo():
     insert_table_jogos(
@@ -414,9 +412,9 @@ def inserir_jogo():
         conex_db,
         name=entry_name_game.get(),
         price=entry_price_game.get(),
-        idade=entry_age_game.get(),
         faixa_etaria=entry_faixa_etaria,
         developer=entry_producer_game.get(),
+        plataformas=entry_plataforma.get(),
         genre=entry_gender_game.get()
     )
 
@@ -517,8 +515,8 @@ if __name__ == "__main__":
         entry_name_game,
         entry_price_game,
         entry_faixa_etaria,
-        entry_age_game,
         entry_producer_game,
+        entry_plataforma,
         entry_gender_game,
         entry_name_player,
         entry_age_player,
