@@ -5,13 +5,13 @@ class AppButton:
     def __init__(self, window,
                  light_purple, medium_lilac,
                  frame_select, frame_insert, frame_cart,
-                 select_image, insert_image, update_image, delete_image,
+                 select_image, insert_image, update_image,delete_image,
                  select_frame, insert_frame, update_frame, delete_frame, game_frame, player_frame,
-                 entry_name_game, entry_price_game, entry_faixa_etaria,
-                 entry_age_game, entry_producer_game, entry_gender_game,
-                 entry_name_player, entry_age_player, entry_country_player,
-                 entry_status_player, entry_games_created_player,
-                 cursor_db, conex_db):
+                 entry_name_game, entry_price_game, entry_faixa_etaria, entry_producer_game, entry_plataforma,
+                 entry_gender_game, entry_name_player, entry_age_player, entry_country_player, entry_status_player,
+                 entry_games_created_player,
+                 cursor_db,
+                 conex_db):
         """
         Construtor da classe AppButton.
 
@@ -23,6 +23,8 @@ class AppButton:
         select_frame...game_frame: Funções de callback para os botões
 
         """
+
+        print("AppButton correto foi importado")
 
         # Atribui todos os parâmetros recebidos aos atributos da instância
         self.window = window
@@ -44,8 +46,8 @@ class AppButton:
         self.entry_name_game = entry_name_game
         self.entry_price_game = entry_price_game
         self.entry_faixa_etaria = entry_faixa_etaria
-        self.entry_age_game = entry_age_game
         self.entry_producer_game = entry_producer_game
+        self.entry_plataforma = entry_plataforma
         self.entry_gender_game = entry_gender_game
         self.entry_name_player = entry_name_player
         self.entry_age_player = entry_age_player
@@ -322,8 +324,8 @@ class AppButton:
                 self.entry_name_game.get(),
                 self.entry_price_game.get(),
                 self.entry_faixa_etaria.get(),
-                self.entry_age_game.get(),
                 self.entry_producer_game.get(),
+                self.entry_plataforma.get(),
                 self.entry_gender_game.get()
             )
         )
