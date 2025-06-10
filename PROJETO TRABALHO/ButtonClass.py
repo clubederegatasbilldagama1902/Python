@@ -7,9 +7,9 @@ class AppButton:
                  frame_select, frame_insert, frame_cart,
                  select_image, insert_image, update_image, delete_image,
                  select_frame, insert_frame, update_frame, delete_frame, game_frame, player_frame,
-                 entry_name_game, entry_price_game, entry_id_game,
+                 entry_name_game, entry_price_game, entry_faixa_etaria,
                  entry_age_game, entry_producer_game, entry_gender_game,
-                 entry_id_player, entry_name_player, entry_age_player, entry_country_player,
+                 entry_name_player, entry_age_player, entry_country_player,
                  entry_status_player, entry_games_created_player,
                  cursor_db, conex_db):
         """
@@ -43,11 +43,10 @@ class AppButton:
         self.player_frame = player_frame
         self.entry_name_game = entry_name_game
         self.entry_price_game = entry_price_game
-        self.entry_id_game = entry_id_game
+        self.entry_faixa_etaria = entry_faixa_etaria
         self.entry_age_game = entry_age_game
         self.entry_producer_game = entry_producer_game
         self.entry_gender_game = entry_gender_game
-        self.entry_id_player = entry_id_player
         self.entry_name_player = entry_name_player
         self.entry_age_player = entry_age_player
         self.entry_country_player = entry_country_player
@@ -317,12 +316,12 @@ class AppButton:
             hover_color="#a676b0",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
-            command=lambda: Insert_table_jogos(
+            command=lambda: insert_table_jogos(
                 self.cursor_db,
                 self.conex_db,
                 self.entry_name_game.get(),
                 self.entry_price_game.get(),
-                self.entry_id_game.get(),
+                self.entry_faixa_etaria.get(),
                 self.entry_age_game.get(),
                 self.entry_producer_game.get(),
                 self.entry_gender_game.get()
@@ -356,7 +355,8 @@ class AppButton:
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=lambda: insert_table_user(
-                self.entry_id_player.get(),
+                self.cursor_db,
+                self.conex_db,
                 self.entry_name_player.get(),
                 self.entry_age_player.get(),
                 self.entry_country_player.get(),
