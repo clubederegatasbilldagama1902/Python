@@ -1,3 +1,4 @@
+
 # -----------------------> IMPORTAÇÕES DE BIBLIOTECAS <-----------------------
 
 from PIL import Image  # Para manipulação de imagens
@@ -186,7 +187,6 @@ def delete_frame():
 def game_frame():
     """Controla a exibição do frame de informações de jogos"""
     global frame_game_visible, frame_player_visible, \
-        label_entry_id_game, entry_id_game, \
         label_entry_name_game, entry_name_game, \
         label_entry_gender_game, entry_gender_game, \
         label_entry_price_game, entry_price_game, \
@@ -194,7 +194,6 @@ def game_frame():
         label_entry_age_game, entry_age_game
 
     if frame_game_visible:
-        label_entry_id_game.place_forget()
         label_entry_name_game.place_forget()
         label_entry_gender_game.place_forget()
         label_entry_price_game.place_forget()
@@ -202,7 +201,6 @@ def game_frame():
         label_entry_age_game.place_forget()
         app_buttons.button_insert_game.place_forget()
 
-        entry_id_game.place_forget()
         entry_name_game.place_forget()
         entry_gender_game.place_forget()
         entry_price_game.place_forget()
@@ -211,7 +209,6 @@ def game_frame():
 
         frame_game_visible = False
     else:
-        label_entry_id_game.place(x=30, y=165)
         label_entry_name_game.place(x=190,y=165)
         label_entry_gender_game.place(x=350, y=165)
         label_entry_price_game.place(x=510,y=165)
@@ -219,7 +216,6 @@ def game_frame():
         label_entry_age_game.place(x=830, y=165)
         app_buttons.button_insert_game.place(x=580, y=500)
 
-        entry_id_game.place(x=30, y=200)
         entry_name_game.place(x=190,y=200)
         entry_gender_game.place(x=350, y=200)
         entry_price_game.place(x=510,y=200)
@@ -247,7 +243,6 @@ def game_frame():
 def player_frame():
     """Controla a exibição do frame de informações de jogadores"""
     global frame_player_visible, frame_game_visible, \
-        label_entry_id_player, entry_id_player, \
         label_entry_name_player, entry_name_player, \
         label_entry_age_player, entry_age_player, \
         label_entry_country_player, entry_country_player, \
@@ -255,7 +250,6 @@ def player_frame():
         label_entry_games_created_player, entry_games_created_player
 
     if frame_player_visible:
-        label_entry_id_player.place_forget()
         label_entry_name_player.place_forget()
         label_entry_age_player.place_forget()
         label_entry_country_player.place_forget()
@@ -289,7 +283,6 @@ def player_frame():
 
         app_buttons.button_insert_user.place(x=580, y=500)
 
-        label_entry_id_game.place_forget()
         label_entry_name_game.place_forget()
         label_entry_gender_game.place_forget()
         label_entry_price_game.place_forget()
@@ -297,8 +290,6 @@ def player_frame():
         label_entry_age_game.place_forget()
 
         app_buttons.button_insert_game.place_forget()
-
-        entry_id_game.place_forget()
         entry_name_game.place_forget()
         entry_gender_game.place_forget()
         entry_price_game.place_forget()
@@ -358,14 +349,14 @@ draw_rounded_line(canvas_line, 0, 0, 489, 10, light_lilac)
 # -----------------------> CAMPOS DE ENTRADA NO FRAME DE JOGOS <-----------------------
 
 # Label para o campo de ID do Jogo
-label_entry_id_game = ttk.Label(frame_insert,
+label_entry_faixa_etaria = ttk.Label(frame_insert,
                                text="ID Jogo",
                                background=light_purple,
                                font=("Calibri", 20))
 
 # Campo de entrada para o ID do Jogo
-entry_id_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
-entry_id_game.configure(bg="#C6B4C9")
+entry_faixa_etaria = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, font=("Calibri", 10))
+entry_faixa_etaria.configure(bg="#C6B4C9")
 
 # Label para o campo de Nome do Jogo
 label_entry_name_game = ttk.Label(frame_insert,
@@ -418,13 +409,13 @@ entry_age_game = tk.Entry(frame_insert, width=20, bg=purple, fg=light_purple, fo
 entry_age_game.configure(bg="#C6B4C9")
 
 def inserir_jogo():
-    Insert_table_jogos(
+    insert_table_jogos(
         cursor_db,
         conex_db,
         name=entry_name_game.get(),
         price=entry_price_game.get(),
-        id_jogo=entry_id_game.get(),  # ou outro campo se você tiver
         idade=entry_age_game.get(),
+        faixa_etaria=entry_faixa_etaria,
         developer=entry_producer_game.get(),
         genre=entry_gender_game.get()
     )
@@ -491,7 +482,8 @@ entry_games_created_player.configure(bg="#C6B4C9")
 
 def inserir_usuario():
     insert_table_user(
-        id=entry_id_player.get(),
+        cursor_db,
+        conex_db,
         nome=entry_name_player.get(),
         idade=entry_age_player.get(),
         pais=entry_country_player.get(),
@@ -524,19 +516,16 @@ if __name__ == "__main__":
         player_frame,
         entry_name_game,
         entry_price_game,
-        entry_id_game,
+        entry_faixa_etaria,
         entry_age_game,
         entry_producer_game,
         entry_gender_game,
-        entry_id_player,
         entry_name_player,
         entry_age_player,
         entry_country_player,
         entry_status_player,
         entry_games_created_player,
-
-        cursor_db,
-        conex_db
+        cursor_db, conex_db
     )
 
     # Criação dos botões na interface
