@@ -1,3 +1,4 @@
+
 import mysql.connector
 
 
@@ -13,8 +14,8 @@ def conection_db():
     conection = mysql.connector.connect(
         user='root',
         host='localhost',
-        database='db_Wixus',
-        password='ceub123456'
+        database='teste_python',
+        password=''
     )
 
     print("Conexão concluida")
@@ -41,12 +42,12 @@ def create_tb_jogos(cursor_db):
 
 
 # Em DataBase.py
-def Insert_table_jogos(name, price, id_jogo, idade, developer, genre):
+def insert_table_jogos(cursor_db, conex_db, name, price, idade, faixa_etaria, developer, genre):
     sql = '''
-    INSERT INTO tb_jogos (name, price, id_jogo, faixa_etaria, developer, plataformas, genre)
-    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO tb_jogos (name, price, faixa_etaria, developer, plataformas, genre)
+    VALUES (%s, %s, %s, %s, %s, %s)
     '''
-    dados_geral = (name, price, id_jogo, idade, developer, "PC", genre)
+    dados_geral = (name, price, idade, faixa_etaria, developer, genre)
     cursor_db.execute(sql, dados_geral)
     conex_db.commit()
     print('Dados do jogo inseridos')
@@ -61,7 +62,7 @@ def Procurar_ID_Jogo():
         print(f'Id: {row[0]} | Nome: {row[1]} | Preço: {row[2]} | Faixa Etaria: {row[3]} | Desenvolvedor: {row[4]} | Data de Lançamento: {row[5]} | plataformas: {row[6]} | Genero: {row[7]} |')
 
 
-def Procurar_Nome():
+def procurar_nome_jogo():
     sql = f''' SELECT * FROM tb_jogos WHERE name '''
     cursor_db.execute(sql)
     rows = cursor_db.fetchall()
@@ -161,12 +162,12 @@ def create_tb_user(cursor_db):
     print("Tabela User criada")
 
 
-def Insert_table_user(id, nome, idade, pais, status, developer):
+def insert_table_user(cursor_db, conex_db, nome, idade, pais, status, developer):
     sql = '''
     INSERT INTO tb_user (nome, idade, pais, status, developer)
     VALUES (%s, %s, %s, %s, %s)
     '''
-    dados = (id, nome, idade, pais, status, developer)
+    dados = (nome, idade, pais, status, developer)
     cursor_db.execute(sql, dados)
     conex_db.commit()
     print('Dados do usuario inseridos')
@@ -288,8 +289,8 @@ if __name__ == '__main__':
     create_tb_cart(cursor_db)
 
     # Insertando dados nas tabelas (Rafael)
-    Insert_table_jogos(cursor_db, conex_db)
-    Insert_table_user(cursor_db, conex_db)
+    insert_table_jogos(cursor_db, conex_db)
+    insert_table_user(cursor_db, conex_db)
     Insert_table_cart(cursor_db, conex_db)
 
     # Atualizando os dados nas tabelas (Rafael)
@@ -304,7 +305,7 @@ if __name__ == '__main__':
 
     # Procurando por informações nos jogos (Mateus)
     Procurar_ID_Jogo()
-    Procurar_Nome()
+    procurar_nome_jogo()
     Procurar_Preco()
     Procurar_Idade()
     Procurar_developer()
@@ -320,21 +321,3 @@ if __name__ == '__main__':
 
     # Ver tudo (Mateus)
     Ver_tudo()
-
-    # Instruções para trouxas (Rafael)
-
-    # Para criar o banco de dados no seu pc, baixe o mysql-connector-python e o mysql-server NA MESMA VERSÂO DO SEU PYTHON
-    # Instale o mysql-connector-python com o comando: pip install mysql-connector-python
-    # Instale o mysql-server com o comando: sudo apt install mysql-server
-    # Para coferir a versao use o comando: get-command python
-    # Então crie uma database no mysql com o nome db_Wixus (ou oq achar melhor) e a senha q tu quiser mas caso as mesmas sejam diferentes, mude no código
-
-    # A primeira vez que você for rodar o código, descomente as linhas de create e COMENTE a database no início do código
-    # Depois disso comente os create e descomente a database no início do código
-    # A inserção da data de lançamento está no formato YYYY-MM-DD, year, month e day
-    # Deixei todas as funções prontas para serem usadas entao caso queira testar alguma coisa, basta comente as paradas que tu não vai usar
-    # O update das tabelas foi feito com escolhas de colunas, se isso dificultar no tkinter, tu q se lasque (me fala q eu faço o de cada um)
-    # Todos os comandos funcionais entam após o main então tudo que quiser usar vai estar lá, se nn tiver, é pq eu não tem
-
-    # Ja avisando que se tiver faltando algum select ou table é td culpa do Ricardo (do Mateus tbm mas isso é de menos), que não fez as paradas direito
-    # Se tiver faltando algum insert, update ou delete é culpa do Rafael que tambem não faz as paradas direito
