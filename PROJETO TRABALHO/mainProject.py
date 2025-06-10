@@ -419,6 +419,8 @@ entry_age_game.configure(bg="#C6B4C9")
 
 def inserir_jogo():
     Insert_table_jogos(
+        cursor_db,
+        conex_db,
         name=entry_name_game.get(),
         price=entry_price_game.get(),
         id_jogo=entry_id_game.get(),  # ou outro campo se você tiver
@@ -488,7 +490,7 @@ entry_games_created_player = tk.Entry(frame_insert, width=20, bg=purple, fg=ligh
 entry_games_created_player.configure(bg="#C6B4C9")
 
 def inserir_usuario():
-    Insert_table_user(
+    insert_table_user(
         id=entry_id_player.get(),
         nome=entry_name_player.get(),
         idade=entry_age_player.get(),
@@ -500,6 +502,8 @@ def inserir_usuario():
 # -----------------------> INÍCIA O LOOP PRINCIPAL DA INTERFACE <-----------------------
 
 if __name__ == "__main__":
+    conex_db = conection_db()
+    cursor_db = conex_db.cursor()
     # Cria uma instância da classe AppButton que gerencia todos os botões
     app_buttons = AppButton(
         window,
@@ -529,7 +533,10 @@ if __name__ == "__main__":
         entry_age_player,
         entry_country_player,
         entry_status_player,
-        entry_games_created_player
+        entry_games_created_player,
+
+        cursor_db,
+        conex_db
     )
 
     # Criação dos botões na interface
