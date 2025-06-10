@@ -1,4 +1,3 @@
-
 import mysql.connector
 
 
@@ -15,7 +14,7 @@ def conection_db():
         user='root',
         host='localhost',
         database='teste_python',
-        password=''
+        password='123456'
     )
 
     print("Conexão concluida")
@@ -42,12 +41,12 @@ def create_tb_jogos(cursor_db):
 
 
 # Em DataBase.py
-def insert_table_jogos(cursor_db, conex_db, name, price, idade, faixa_etaria, developer, genre):
+def insert_table_jogos(cursor_db, conex_db, name, price, faixa_etaria, developer, plataformas, genre):
     sql = '''
     INSERT INTO tb_jogos (name, price, faixa_etaria, developer, plataformas, genre)
     VALUES (%s, %s, %s, %s, %s, %s)
     '''
-    dados_geral = (name, price, idade, faixa_etaria, developer, genre)
+    dados_geral = (name, price, faixa_etaria, developer, plataformas, genre)
     cursor_db.execute(sql, dados_geral)
     conex_db.commit()
     print('Dados do jogo inseridos')
@@ -321,3 +320,23 @@ if __name__ == '__main__':
 
     # Ver tudo (Mateus)
     Ver_tudo()
+
+    # Instruções para trouxas (Rafael)
+
+    # Para criar o banco de dados no seu pc, baixe o mysql-connector-python e o mysql-server NA MESMA VERSÂO DO SEU PYTHON
+    # Instale o mysql-connector-python com o comando: pip install mysql-connector-python
+    # Instale o mysql-server com o comando: sudo apt install mysql-server
+    # Para coferir a versao use o comando: get-command python
+    # Então crie uma database no mysql com o nome db_Wixus (ou oq achar melhor) e a senha q tu quiser mas caso as mesmas sejam diferentes, mude no código
+
+    # A primeira vez que você for rodar o código, descomente as linhas de create e COMENTE a database no início do código
+    # Depois disso comente os create e descomente a database no início do código
+    # A inserção da data de lançamento está no formato YYYY-MM-DD, year, month e day
+    # Deixei todas as funções prontas para serem usadas entao caso queira testar alguma coisa, basta comente as paradas que tu não vai usar
+    # O update das tabelas foi feito com escolhas de colunas, se isso dificultar no tkinter, tu q se lasque (me fala q eu faço o de cada um)
+    # Todos os comandos funcionais entam após o main então tudo que quiser usar vai estar lá, se nn tiver, é pq eu não tem
+
+    # Ja avisando que se tiver faltando algum select ou table é td culpa do Ricardo (do Mateus tbm mas isso é de menos), que não fez as paradas direito
+    # Se tiver faltando algum insert, update ou delete é culpa do Rafael que tambem não faz as paradas direito
+
+    #BAIXAR O XAMPP E O BANCO DE DADOS test_python com as tables la dentro
